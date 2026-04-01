@@ -109,3 +109,11 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 } */
+.nav-link {
+  margin-left: 40px;
+}
+.height {
+  color: #424242;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
