@@ -2,6 +2,15 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import PositionRow from "./PositionRow";
 import "./positions.css";
+//=====================Normalization function
+const normalize = (name) => name.replace("(INTRA)", "").trim();
+const getLivePrice = (name, livePrices, fallback) => {
+  return (
+    livePrices[name] || // normal
+    livePrices[`${name}(INTRA)`] || // intra
+    fallback // fallback avg
+  );
+};
 
 /* ─── Tiny icons (inline SVG — zero deps) ───────────────────────── */
 const IconTrending = () => (
@@ -73,7 +82,8 @@ const SummaryCards = ({ positions, livePrices }) => {
     for (const stock of positions) {
       // const live = livePrices[stock.name];
       // const ltp = live ? live.ltp : stock.avg;
-      const live = livePrices[stock.name];
+      const cleanName = normalize(stock.name);
+      const live = getLivePrice(cleanName, livePrices, stock.avg);
 
       const ltp = typeof live === "number" ? live : (live?.ltp ?? stock.avg);
       const pnlRaw = calcPnl(stock, ltp);
@@ -197,7 +207,8 @@ const Positions = ({ livePrices }) => {
   /* ── Enrich positions with live P&L, then sort ── */
   const enriched = useMemo(() => {
     return allPositions.map((stock) => {
-      const live = livePrices[stock.name];
+      const cleanName = normalize(stock.name);
+      const live = getLivePrice(cleanName, livePrices, stock.avg);
 
       const ltp = typeof live === "number" ? live : (live?.ltp ?? stock.avg);
       const pnl = calcPnl(stock, ltp);
@@ -223,11 +234,30 @@ const Positions = ({ livePrices }) => {
 
   const toggleSort = useCallback(() => setSortAsc((prev) => !prev), []);
 
-  const handleExit = useCallback((stock) => {
-    // Placeholder: wire to your order window or API call
-    console.log("[Exit position]", stock.name, stock.side);
-    alert(`Exit signal sent for ${stock.name}`);
-  }, []);
+  const handleExit = async (stock) => {
+    try {
+      await axios.post(
+        "http://localhost:8080/orders",
+        {
+          stockName: stock.name,
+          qty: stock.qty,
+          price: stock._ltp || stock.avg,
+          mode: "SELL",
+        },
+        { withCredentials: true },
+      );
+      // window.location.reload();
+      setAllPositions((prev) =>
+        prev
+          .map((p) =>
+            p.name === stock.name ? { ...p, qty: p.qty - stock.qty } : p,
+          )
+          .filter((p) => p.qty > 0),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="positions-page">
@@ -278,7 +308,7 @@ const Positions = ({ livePrices }) => {
                 <PositionRow
                   key={`${stock.name}-${stock.side}`}
                   stock={stock}
-                  livePrice={livePrices[stock.name]}
+                  livePrice={stock._ltp}
                   isBest={idx === bestIdx}
                   isWorst={idx === worstIdx}
                   maxAbsPnl={maxAbsPnl}

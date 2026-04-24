@@ -116,6 +116,102 @@ export const watchlist = [
     percent: "1.78%",
     isDown: false,
   },
+  {
+    name: "HDFCBANK",
+    price: 1652.3,
+    percent: "0.55%",
+    isDown: false,
+  },
+  {
+    name: "HINDUNILVR",
+    price: 2520.4,
+    percent: "-0.58%",
+    isDown: true,
+  },
+  {
+    name: "KOTAKBANK",
+    price: 1885.2,
+    percent: "0.48%",
+    isDown: false,
+  },
+  {
+    name: "MARUTI",
+    price: 10320.6,
+    percent: "-1.25%",
+    isDown: true,
+  },
+  {
+    name: "SUNPHARMA",
+    price: 1245.9,
+    percent: "0.92%",
+    isDown: false,
+  },
+  {
+    name: "TITAN",
+    price: 3475.2,
+    percent: "0.53%",
+    isDown: false,
+  },
+  {
+    name: "ULTRACEMCO",
+    price: 9820.5,
+    percent: "-0.78%",
+    isDown: true,
+  },
+  {
+    name: "POWERGRID",
+    price: 290.4,
+    percent: "0.34%",
+    isDown: false,
+  },
+  {
+    name: "GOOGL",
+    price: 100850,
+    percent: "1.10%",
+    isDown: false,
+  },
+  {
+    name: "MSFT",
+    price: 59250,
+    percent: "-0.65%",
+    isDown: true,
+  },
+  {
+    name: "SGBMAY29",
+    price: 4755,
+    percent: "0.28%",
+    isDown: false,
+  },
+  {
+    name: "ITC",
+    price: 205.6,
+    percent: "1.78%",
+    isDown: false,
+  },
+  {
+    name: "TATAPOWER",
+    price: 4980.3,
+    percent: "-0.40%",
+    isDown: true,
+  },
+  {
+    name: "AAPL",
+    price: 6100,
+    percent: "1.25%",
+    isDown: false,
+  },
+  {
+    name: "EVEREADY(INTRA)",
+    price: 3185.7,
+    percent: "-0.62%",
+    isDown: true,
+  },
+  {
+    name: "JUBLFOOD(INTRA)",
+    price: 4825.4,
+    percent: "0.95%",
+    isDown: false,
+  },
 ];
 
 // holdings

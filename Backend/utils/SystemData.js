@@ -33,18 +33,30 @@ function contextSummary(holdings, prices) {
 }
 //=============================detect Intent //========================================
 function detectIntent(message) {
-  msg = message.toLowerCase();
+  const msg = message.toLowerCase();
 
-  if (msg.includes("profit") || msg.includes("p&l")) return "profit";
-  if (
-    msg.includes("stock") ||
-    msg.includes("price") ||
-    msg.includes("buy") ||
-    msg.includes("sell")
-  )
-    return "stock";
+  // 🔥 FAST (no LLM)
+  if (msg.includes("p&l") || msg.includes("profit") || msg.includes("loss")) {
+    return "profit_direct";
+  }
 
-  if (msg.includes("investment")) return "investment";
+  if (msg.includes("balance") || msg.includes("fund")) {
+    return "funds_direct";
+  }
+
+  if (msg.includes("position")) {
+    return "positions_direct";
+  }
+
+  // 🔥 LLM REQUIRED
+  if (msg.includes("should") || msg.includes("advice")) {
+    return "advice";
+  }
+
+  if (msg.includes("why") || msg.includes("reason")) {
+    return "explanation";
+  }
+
   return "general";
 }
 //=============================== buildContext//================================

@@ -169,16 +169,46 @@ const BASE_STOCKS = [
     basePrice: 6000,
   },
   {
-    symbol: "EVEREADY",
+    symbol: "EVEREADY(INTRA)",
     name: "Eveready Industries India Ltd",
     sector: "Consumer Goods",
     basePrice: 3200.5,
   },
   {
-    symbol: "JUBLFOOD",
+    symbol: "JUBLFOOD(INTRA)",
     name: "Jubilant FoodWorks Ltd",
     sector: "Food & Beverage",
     basePrice: 4800.75,
+  },
+  {
+    symbol: "GOOGL",
+    name: "Alphabet Inc (Google)",
+    sector: "Technology",
+    basePrice: 100000,
+  },
+  {
+    symbol: "MSFT",
+    name: "Microsoft Corporation",
+    sector: "Technology",
+    basePrice: 59000,
+  },
+  {
+    symbol: "SGBMAY29",
+    name: "Sovereign Gold Bond May 2029",
+    sector: "Government Bond / Commodity",
+    basePrice: 4727,
+  },
+  {
+    symbol: "ADANIENT",
+    name: "Adani Enterprises Ltd",
+    sector: "Conglomerate",
+    basePrice: 3000,
+  },
+  {
+    symbol: "HUL",
+    name: "Hindustan Unilever Ltd",
+    sector: "FMCG",
+    basePrice: 2534.85,
   },
 ];
 

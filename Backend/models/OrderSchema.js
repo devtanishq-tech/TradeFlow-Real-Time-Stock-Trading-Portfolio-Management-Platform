@@ -14,6 +14,10 @@ const OrderSchema = new Schema(
       type: Number,
       default: null,
     },
+    product: {
+      type: String,
+      enum: ["MIS", "CNC"],
+    },
   },
   {
     timestamps: true,

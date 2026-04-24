@@ -7,6 +7,7 @@ const PositionsSchema = new Schema(
     qty: Number,
     avg: Number,
   },
+
   {
     timestamps: true,
   },

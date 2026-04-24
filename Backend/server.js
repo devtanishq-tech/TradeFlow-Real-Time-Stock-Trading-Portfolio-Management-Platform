@@ -198,90 +198,167 @@ app.get("/orders", isAuthenticated, async (req, res) => {
   res.send(orders);
 });
 // post requesta are stored in body
+//=========================== Order -Post ========================================
 app.post("/orders", isAuthenticated, async (req, res) => {
   try {
     const { stockName, qty, price, mode } = req.body;
-    // const newOrder = new Orders({ stockName, qty, price, mode });
-    // await newOrder.save();
+    const fundData = await Funds.findOne({ userId: req.user.id });
+    const isIntra = stockName.includes("(INTRA)");
+    const cleanName = stockName.replace("(INTRA)", "").trim();
 
-    const fundData = await Funds.findOne({ userId: req.user.id }); // Fetching Funds data
-    let existing = await Holdings.findOne({ name: stockName }); // Fetching holdings Data
+    let existingHolding = await Holdings.findOne({ name: cleanName });
+    let existingPosition = await Positions.findOne({ name: cleanName });
+
     const totalCost = qty * price;
+
+    // ================= BUY =================
     if (mode === "BUY") {
+      // Save order (product will be ignored if not in schema — OK for now)
       const newOrder = new Orders({
-        stockName,
+        stockName: cleanName,
         qty,
         price,
         mode,
+        product: isIntra ? "MIS" : "CNC",
       });
-
       await newOrder.save();
+
       if (fundData.availableCash < totalCost) {
-        return res.status(400).json({ message: "Insufficent BALANCE" });
+        return res.status(400).json({ message: "Insufficient BALANCE" });
       }
-      fundData.availableCash -= totalCost; // Updatinon
+
+      fundData.availableCash -= totalCost;
       fundData.usedMargin += totalCost;
       await fundData.save();
-      if (existing) {
-        let totalQty = existing.qty + qty;
-        let newAvg = (existing.avg * existing.qty + price * qty) / totalQty;
-        existing.qty = totalQty;
-        existing.avg = newAvg;
-        // existing.prevClose = existing.price;
-        // existing.price = price;
-        await existing.save();
+
+      if (isIntra) {
+        if (existingPosition) {
+          let totalQty = existingPosition.qty + qty;
+          let newAvg =
+            (existingPosition.avg * existingPosition.qty + price * qty) /
+            totalQty;
+
+          existingPosition.qty = totalQty;
+          existingPosition.avg = newAvg;
+          existingPosition.product = "MIS";
+
+          await existingPosition.save();
+        } else {
+          await Positions.create({
+            name: cleanName,
+            qty,
+            avg: price,
+            product: "MIS",
+          });
+        }
+
+        return res.send("INTRA position created");
+      }
+
+      if (existingHolding) {
+        let totalQty = existingHolding.qty + qty;
+        let newAvg =
+          (existingHolding.avg * existingHolding.qty + price * qty) / totalQty;
+
+        existingHolding.qty = totalQty;
+        existingHolding.avg = newAvg;
+
+        await existingHolding.save();
       } else {
         await Holdings.create({
-          name: stockName,
+          name: cleanName,
           qty,
           avg: price,
-          // price: price,
-          // prevClose: price - Math.random() * 20,
         });
       }
+
+      return res.send("CNC holding created");
     }
+
+    // ================= SELL =================
     if (mode === "SELL") {
-      if (!existing) {
+      console.log("REQ:", cleanName, qty);
+      console.log("DB:", existingPosition?.qty);
+
+      // 🔥 1. Check POSITION first
+      if (existingPosition) {
+        if (existingPosition.qty < qty) {
+          return res.status(400).send("Insufficient position quantity");
+        }
+
+        const sellValue = price * qty;
+        const buyValue = existingPosition.avg * qty;
+        const profit = sellValue - buyValue;
+
+        await new Orders({
+          stockName: cleanName,
+          qty,
+          price,
+          mode,
+          realizedPnl: profit,
+        }).save();
+
+        existingPosition.qty -= qty;
+
+        if (existingPosition.qty === 0) {
+          await Positions.deleteOne({ _id: existingPosition._id });
+        } else {
+          await existingPosition.save();
+        }
+
+        fundData.availableCash += sellValue;
+        fundData.usedMargin -= buyValue;
+        fundData.balance += profit;
+
+        await fundData.save();
+
+        return res.send("Position closed + Funds updated");
+      }
+
+      if (!existingHolding) {
         return res.status(400).send("Stock not found");
       }
-      if (existing.qty < qty) {
+
+      if (existingHolding.qty < qty) {
         return res.status(400).send("Insufficient quantity");
       }
-      // =========================================== Updates for Funds=================================
+
       const sellValue = price * qty;
-      const buyValue = existing.avg * qty;
+      const buyValue = existingHolding.avg * qty;
       const profit = sellValue - buyValue;
-      existing.qty -= qty;
-      const newOrder = new Orders({
-        stockName,
+
+      existingHolding.qty -= qty;
+
+      await new Orders({
+        stockName: cleanName,
         qty,
         price,
         mode,
-        realizedPnl: profit, // ✅ ADD THIS
-      });
-      await newOrder.save();
+        realizedPnl: profit,
+      }).save();
 
-      //===============================================================================================
-      //================================New order Save
-
-      //======================================================================================
-      if (existing.qty === 0) {
-        await Holdings.deleteOne({ name: stockName });
+      if (existingHolding.qty === 0) {
+        await Holdings.deleteOne({ name: cleanName });
       } else {
-        await existing.save();
+        await existingHolding.save();
       }
-      fundData.usedMargin -= buyValue;
+
       fundData.availableCash += sellValue;
+      fundData.usedMargin -= buyValue;
       fundData.balance += profit;
+
       await fundData.save();
-      // now again
+
+      return res.send("Holding sold + Funds updated");
     }
-    res.send("Order + Holdings updated");
+
+    res.send("Order processed");
   } catch (err) {
     console.log(err);
     res.status(500).send("Error");
   }
 });
+//=================================================================================
 app.get("/positions", isAuthenticated, async (req, res) => {
   const Post = await Positions.find();
   res.send(Post);
@@ -360,18 +437,47 @@ app.get("/me", isAuthenticated, async (req, res) => {
 //     res.status(500).json({ reply: "Server error" });
 //   }
 // });
-// =========================================================================
+// =================================AI------- CHAT -===================================================
 app.post("/aiChat", async (req, res) => {
   try {
     const { message, holdings, livePrices, history } = req.body;
-    console.log("History recirved :", history);
+
     const summary = contextSummary(holdings, livePrices);
     const intent = detectIntent(message);
+
+    // ================= FAST PATH (NO LLM) =================
+
+    if (intent === "profit_direct") {
+      const { totalPnL, bestStock, worstStock } = summary;
+
+      return res.send({
+        reply: `P&L: ₹${Math.round(totalPnL)}
+Best: ${bestStock.name} (+₹${Math.round(bestStock.pnl)})
+Worst: ${worstStock.name} (₹${Math.round(worstStock.pnl)})`,
+      });
+    }
+
+    if (intent === "funds_direct") {
+      return res.send({
+        reply: `Your funds are available in dashboard.`,
+      });
+    }
+
+    if (intent === "positions_direct") {
+      return res.send({
+        reply: `You have ${holdings.length} active holdings.`,
+      });
+    }
+
+    // ================= LLM PATH =================
+
     const context = buildContext(intent, summary, message);
-    const response = await LLMapi(message, context, history); // this where we are sending the data to the llm  api
+
+    const response = await LLMapi(message, context, history);
+
     res.send({ reply: response });
   } catch (err) {
-    res.status(500).json({ reply: "Error occur in this " });
+    res.status(500).json({ reply: "Error occurred" });
   }
 });
 //===========================================================================================
@@ -409,7 +515,7 @@ setInterval(() => {
       // this where we are sending data to the frontend side
     }
   });
-}, 9000);
+}, 10000);
 
 // app.post("/addHolding", async (req, res) => {
 //   await Holdings.deleteMany({});
