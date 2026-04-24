@@ -1,0 +1,1600 @@
+/* ═══════════════════════════════════════════════════════════════════
+   INDEX.CSS — Zerodha-style Dark Theme System
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap");
+
+/* ─── Design Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg-base: #0b0f1a;
+  --bg-primary: #0e0f11;
+  --bg-secondary: #111827;
+  --bg-card: #1a2035;
+  --bg-row: #141519;
+  --bg-row-hover: #1c1e26;
+  --bg-elevated: #1e2538;
+
+  --border: #23252d;
+  --border-soft: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+
+  --text-primary: #e8eaf0;
+  --text-secondary: #94a3b8;
+  --text-muted: #5c6070;
+  --text-label: #8b8fa8;
+
+  --profit: #22c55e;
+  --profit-bg: rgba(34, 197, 94, 0.08);
+  --profit-border: rgba(34, 197, 94, 0.2);
+  --loss: #ef4444;
+  --loss-bg: rgba(239, 68, 68, 0.08);
+  --loss-border: rgba(239, 68, 68, 0.2);
+  --accent: #4184f3;
+  --accent-hover: #5a9af5;
+
+  --btn-buy-bg: #1565c0;
+  --btn-buy-hover: #1976d2;
+  --btn-sell-bg: #b71c1c;
+  --btn-sell-hover: #c62828;
+  --btn-neutral-bg: #1e2128;
+  --btn-neutral-hover: #2a2d38;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --t-fast: 150ms ease;
+  --t-med: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Global Reset ───────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family:
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "DM Mono", source-code-pro, Menlo, Monaco, Consolas, monospace;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  height: 0;
+}
+
+/* ─── Layout Shell ───────────────────────────────────────────────── */
+.dashboard-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+/*
+  KEY FIX 1: min-height: 0 lets this flex child shrink correctly.
+  KEY FIX 2: overflow-y: auto gives it a scrollbar instead of clipping.
+  The media query was overriding height: 90vh to height: auto at
+  narrow widths (e.g. when DevTools was open), which is why the table
+  only appeared then. Now it always scrolls properly at any width.
+*/
+.content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--space-lg);
+  background: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* KEY FIX 3: stop flex from squishing children (table) to 0px height */
+.content > * {
+  flex-shrink: 0;
+}
+
+.content::-webkit-scrollbar {
+  width: 5px;
+}
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.content::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* ─── TopBar ─────────────────────────────────────────────────────── */
+.topbar-container {
+  width: 100%;
+  height: 48px; /* fixed today */
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+.indices-container {
+  flex-basis: 32%;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 var(--space-lg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--space-lg);
+}
+
+.nifty,
+.sensex {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.index {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-label);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.index:hover {
+  color: var(--text-primary);
+}
+
+.index-points {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--loss);
+}
+
+.percent {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─── Menu / TopBar Nav ──────────────────────────────────────────── */
+.menu-container {
+  flex: 1;
+  height: 100%;
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-primary);
+}
+
+.logo {
+  width: 28px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.menus {
+  display: flex;
+  align-items: center;
+}
+
+.menus ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.menus li {
+  display: inline-block;
+}
+
+.menu {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-label);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--t-fast),
+    background var(--t-fast);
+  cursor: pointer;
+}
+.menu:hover {
+  color: var(--text-primary);
+  background: var(--bg-row-hover);
+}
+.menu-selected {
+  color: #fd6834 !important;
+}
+
+.menu-container > hr,
+.menus ~ hr {
+  border: none;
+  border-left: 1px solid var(--border);
+  height: 24px;
+  width: 0;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast);
+}
+.profile:hover {
+  background: var(--bg-row-hover);
+}
+
+.profile .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(147, 51, 234, 0.25);
+  color: #c084fc;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile .username {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: color var(--t-fast);
+}
+.profile:hover .username {
+  color: var(--text-primary);
+}
+
+/* ─── Watchlist ──────────────────────────────────────────────────── */
+.watchlist-container {
+  flex-basis: 32%;
+  flex-shrink: 0;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch; /* add this forcess full height within dashboard container*/
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.watchlist-container::-webkit-scrollbar {
+  width: 4px;
+}
+.watchlist-container::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.search,
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: "DM Sans", sans-serif;
+  font-size: 12.5px;
+  caret-color: var(--profit);
+}
+.search::placeholder,
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.counts {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: var(--space-sm);
+}
+
+.list {
+  list-style: none;
+  padding-bottom: 60px;
+}
+
+.list li {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+.list li:hover {
+  background: var(--bg-row-hover);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 400;
+  position: relative;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+}
+.item-info span:nth-child(1) {
+  color: var(--text-label);
+}
+.item-info span:nth-child(2) {
+  color: var(--loss);
+}
+.item-info span:nth-child(3) {
+  color: var(--loss);
+}
+
+.actions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  display: none;
+  gap: 3px;
+  padding-right: 8px;
+  background: var(--bg-row-hover);
+}
+.list li:hover > .actions {
+  display: flex;
+}
+
+.actions span button {
+  width: 36px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: opacity var(--t-fast);
+}
+.actions span button:hover {
+  opacity: 0.85;
+}
+
+.buy {
+  background: var(--btn-buy-bg);
+  color: #fff;
+}
+.sell {
+  background: var(--btn-sell-bg);
+  color: #fff;
+}
+
+.action {
+  background: var(--btn-neutral-bg);
+  border: 1px solid var(--border) !important;
+  color: var(--text-label);
+}
+.action:hover {
+  background: var(--btn-neutral-hover) !important;
+}
+
+.icon {
+  color: var(--text-label);
+}
+
+.watchlist-number {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 32%;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.watchlist-number ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.watchlist-number ul li {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 12px;
+  border-right: 1px solid var(--border);
+  color: var(--text-label);
+  cursor: pointer;
+  transition:
+    color var(--t-fast),
+    background var(--t-fast);
+}
+.watchlist-number ul li:nth-child(1) {
+  color: var(--loss);
+}
+.watchlist-number ul li:hover {
+  color: #fd6834;
+  background: var(--bg-row-hover);
+}
+
+.settings {
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.settings:hover {
+  color: var(--text-primary);
+}
+
+.down {
+  color: var(--loss);
+}
+.up {
+  color: var(--profit);
+}
+
+/* ─── Page Titles ────────────────────────────────────────────────── */
+.title {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+/* ─── Order / Holdings / Positions Table ─────────────────────────── */
+.order-table {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.order-table table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.order-table thead tr,
+.order-table tr:first-child {
+  background: var(--bg-secondary);
+}
+
+.order-table th {
+  padding: 11px 14px;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.order-table th:first-child,
+.order-table td:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.order-table th:last-child,
+.order-table td:last-child {
+  padding-right: 20px;
+}
+
+.order-table tr th:nth-child(1),
+.order-table tr th:nth-child(4) {
+  border-right: 1px solid var(--border-soft);
+}
+.order-table tr td:nth-child(1),
+.order-table tr td:nth-child(4) {
+  border-right: 1px solid var(--border-soft);
+}
+
+.order-table td {
+  padding: 11px 14px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-soft);
+  transition: background var(--t-fast);
+}
+
+.order-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.order-table tbody tr:hover td {
+  background: var(--bg-row-hover);
+}
+.order-table td:last-child {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.order-table tr td:first-child p {
+  display: inline-block;
+  background: var(--loss-bg);
+  color: var(--loss);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.order-table td.profit {
+  color: var(--profit);
+}
+.order-table td.loss {
+  color: var(--loss);
+}
+.order-table td.buy {
+  color: var(--accent);
+  font-weight: 500;
+}
+.order-table td.sell {
+  color: var(--loss);
+  font-weight: 500;
+}
+
+.order-table td.status {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--profit);
+  text-transform: uppercase;
+}
+
+.order-table input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
+.align-left {
+  text-align: left !important;
+}
+
+/* ─── Summary Row ────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.col {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  transition: border-color var(--t-fast);
+}
+.col:hover {
+  border-color: #334155;
+}
+
+.col p {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.col h5 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.col h5 span {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.row .col:last-child h5 {
+  color: var(--profit);
+}
+
+/* ─── Summary Page ───────────────────────────────────────────────── */
+.username h6 {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  height: 0;
+  margin: var(--space-md) 0;
+}
+
+.section {
+  padding-bottom: var(--space-md);
+}
+
+.section span {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.section span p {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.section-icon {
+  transform: scale(0.8);
+  color: var(--text-label);
+  margin-right: var(--space-sm);
+}
+
+.data {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.data .first h3 {
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  font-family: "DM Mono", monospace;
+}
+
+.data .first p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.data .first small {
+  font-size: 12px;
+  color: var(--profit);
+  margin-left: 4px;
+}
+
+.data .first .profit {
+  color: var(--profit);
+}
+
+.data > hr {
+  border: none;
+  border-left: 1px solid var(--border);
+  height: 56px;
+  width: 0;
+}
+
+.data .second p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+  white-space: nowrap;
+}
+
+.data .second p span {
+  display: inline;
+  margin-left: var(--space-sm);
+  font-size: 12px;
+  font-family: "DM Mono", monospace;
+  color: var(--text-secondary);
+}
+
+/* ─── Funds Page ─────────────────────────────────────────────────── */
+.funds {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-md);
+}
+
+.funds p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: var(--space-sm);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    opacity var(--t-fast),
+    transform var(--t-fast);
+  color: #fff;
+  text-decoration: none;
+}
+.btn:hover {
+  opacity: 0.85;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-green {
+  background: #16a34a;
+}
+.btn-blue {
+  background: var(--accent);
+}
+.btn-grey {
+  background: #374151;
+  color: var(--text-secondary);
+}
+.btn-red {
+  background: var(--loss);
+}
+
+.btn-green:hover {
+  background: #15803d;
+}
+.btn-blue:hover {
+  background: var(--accent-hover);
+}
+.btn-grey:hover {
+  background: #4b5563;
+  color: var(--text-primary);
+}
+
+/* ─── Funds Table Card ───────────────────────────────────────────── */
+.table {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.table .data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table .data > * {
+  margin-bottom: var(--space-md);
+}
+.table .data p:first-child {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.imp {
+  font-size: 14px;
+  font-family: "DM Mono", monospace;
+  color: var(--text-primary);
+}
+
+.colored {
+  color: var(--accent);
+}
+
+.table hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  height: 0;
+  margin-bottom: var(--space-md);
+}
+
+.commodity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.commodity p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* ─── Orders Empty State ─────────────────────────────────────────── */
+.orders {
+  padding: var(--space-lg);
+  background: var(--bg-base);
+  min-height: 100%;
+}
+
+.no-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 55vh;
+  gap: var(--space-lg);
+}
+
+.no-orders .icon {
+  transform: scale(3.5);
+  color: #2d3748;
+}
+
+.no-orders p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+
+/* ─── Buy/Sell Order Window ──────────────────────────────────────── */
+.container {
+  --radius: var(--radius-md);
+  width: 40%;
+  height: auto;
+  min-height: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  position: absolute;
+  bottom: 0;
+  left: 35%;
+  z-index: 100;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  cursor: move;
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.container .header {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.container .header.buy-header {
+  background: rgba(65, 132, 243, 0.15);
+}
+.container .header.sell-header {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.header h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.header h3 span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.market-options {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.market-options label {
+  margin-right: var(--space-sm);
+  cursor: pointer;
+}
+.market-options input[type="radio"] {
+  margin-right: 4px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.tab {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab button {
+  background: transparent;
+  border: none;
+  padding: 12px var(--space-md);
+  color: var(--text-label);
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+.tab button:hover {
+  color: var(--accent);
+}
+
+.regular-order {
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  background: var(--bg-card);
+}
+
+.regular-order label {
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.order-validity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.order-validity label span {
+  color: var(--text-muted);
+}
+
+.inputs {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+}
+
+.inputs fieldset {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+}
+
+.inputs fieldset legend {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.inputs fieldset input {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "DM Mono", monospace;
+  padding: 8px 12px;
+  min-height: 36px;
+  outline: none;
+}
+
+.inputs fieldset input:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.sub-order-type label,
+.stop-loss-type label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-right: var(--space-sm);
+  cursor: pointer;
+}
+
+.sub-order-type label input,
+.stop-loss-type label input {
+  margin-right: 4px;
+  accent-color: var(--accent);
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.options span {
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+}
+.options span:hover {
+  color: var(--accent-hover);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.buttons span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─── Flash Message ──────────────────────────────────────────────── */
+.flash-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid var(--profit-border);
+  color: var(--profit);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
+/* ─── Utility ────────────────────────────────────────────────────── */
+.profit {
+  color: var(--profit) !important;
+}
+.loss {
+  color: var(--loss) !important;
+}
+/*===========================================================Fund CSS====*/
+
+/* ═══════════════════════════════════════════════════════════════════
+   FUNDS UI ENHANCEMENTS — append these rules to index.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Funds Action Bar ───────────────────────────────────────────── */
+.funds {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.funds-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+
+.funds-hint svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.funds-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Icons inside buttons */
+.btn svg {
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+
+/* ─── Funds Column Card ──────────────────────────────────────────── */
+.funds-col {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.funds-col-header {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-secondary);
+}
+
+.funds-col-badge {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+/* ─── Funds Table ────────────────────────────────────────────────── */
+.funds-table {
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+
+.funds-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-soft);
+  transition: background var(--t-fast);
+}
+
+.funds-row:last-child {
+  border-bottom: none;
+}
+
+.funds-row--highlight {
+  padding: 12px 10px;
+  margin: 0 -10px;
+  border-radius: var(--radius-sm);
+  border-bottom: none;
+  background: rgba(65, 132, 243, 0.05);
+  border: 1px solid rgba(65, 132, 243, 0.12);
+  margin-bottom: 4px;
+}
+
+.funds-row--highlight:hover {
+  background: rgba(65, 132, 243, 0.08);
+}
+
+.funds-row--sm {
+  padding: 7px 0;
+}
+
+.funds-row--total {
+  border-top: 1px solid var(--border-soft);
+  margin-top: 2px;
+  padding-top: 9px;
+}
+
+.funds-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+}
+
+.funds-value {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.funds-value--mono {
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.funds-value--sm {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.funds-value--accent {
+  font-family: "DM Mono", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+.funds-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  height: 0;
+  margin: var(--space-sm) 0;
+}
+
+/* ─── Commodity Empty State ──────────────────────────────────────── */
+.commodity {
+  min-height: 220px;
+  gap: var(--space-sm);
+}
+
+.commodity-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.commodity-title {
+  font-size: 13px !important;
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 4px !important;
+}
+
+.commodity-sub {
+  font-size: 12px !important;
+  color: var(--text-muted) !important;
+  max-width: 220px;
+  text-align: center;
+  line-height: 1.6;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* ─── Funds Modal Overlay ────────────────────────────────────────── */
+.funds-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(7, 9, 16, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: funds-overlay-in 160ms ease both;
+}
+
+@keyframes funds-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ─── Funds Modal Box ────────────────────────────────────────────── */
+.funds-modal {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  animation: funds-modal-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes funds-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── Modal Header ───────────────────────────────────────────────── */
+.funds-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-secondary);
+}
+
+.funds-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.funds-modal-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.funds-modal-icon--green {
+  background: rgba(22, 163, 74, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.funds-modal-icon--blue {
+  background: rgba(65, 132, 243, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(65, 132, 243, 0.2);
+}
+
+.funds-modal-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.funds-modal-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+  text-transform: none !important;
+}
+
+.funds-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+.funds-modal-close:hover {
+  background: var(--bg-row-hover);
+  color: var(--text-primary);
+}
+
+/* ─── Modal Body ─────────────────────────────────────────────────── */
+.funds-modal-body {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.funds-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.funds-modal-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.funds-modal-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition:
+    border-color var(--t-fast),
+    box-shadow var(--t-fast);
+}
+
+.funds-modal-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(65, 132, 243, 0.12);
+}
+
+.funds-modal-prefix {
+  padding: 0 14px;
+  font-family: "DM Mono", monospace;
+  font-size: 16px;
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+  line-height: 1;
+  user-select: none;
+}
+
+.funds-modal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 13px 14px;
+  font-family: "DM Mono", monospace;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-primary);
+  caret-color: var(--accent);
+  width: 100%;
+}
+
+.funds-modal-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* hide number input arrows */
+.funds-modal-input::-webkit-outer-spin-button,
+.funds-modal-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.funds-modal-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.funds-modal-error {
+  font-size: 11.5px;
+  color: var(--loss);
+  margin-top: 4px;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+/* ─── Quick Amount Chips ─────────────────────────────────────────── */
+.funds-modal-quick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.funds-modal-quick-label {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.funds-modal-chips {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.funds-chip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: "DM Mono", monospace;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.funds-chip:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+.funds-chip--active {
+  background: rgba(65, 132, 243, 0.12);
+  border-color: rgba(65, 132, 243, 0.35);
+  color: var(--accent);
+}
+
+/* ─── Modal Info Note ────────────────────────────────────────────── */
+.funds-modal-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.funds-modal-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  opacity: 0.6;
+}
+
+/* ─── Modal Footer ───────────────────────────────────────────────── */
+.funds-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-secondary);
+}
+
+/* Disabled state for all btns */
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}

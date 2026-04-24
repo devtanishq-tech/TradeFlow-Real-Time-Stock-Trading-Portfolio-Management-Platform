@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <nav
       style={{ backgroundColor: "white" }}
-      className="navbar navbar-expand-lg border-bottom "
+      className="navbar navbar-expand-lg border-bottom sticky-top bg-white"
     >
       <div className="container p-2">
         <Link className="navbar-brand" to={"/"}>
@@ -65,9 +65,9 @@ function Navbar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link active" href="#">
+                <Link className="nav-link active" to={"/"}>
                   <i className="fa-solid fa-bars"></i>
-                </a>
+                </Link>
               </li>
             </ul>
           </form>

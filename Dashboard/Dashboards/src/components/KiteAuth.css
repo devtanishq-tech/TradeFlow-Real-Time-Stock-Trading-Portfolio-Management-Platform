@@ -1,0 +1,289 @@
+/* =============================================
+   KiteAuth.css — Shared styles for Login & Signup
+   ============================================= */
+
+.kite-page {
+  background-color: #f2f2f2;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Full-width centering wrapper */
+.kite-page__body {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 32px 16px;
+}
+
+/* Card */
+.kite-card {
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  padding: 48px 56px 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Signup card gets a touch more room */
+.kite-card--signup {
+  max-width: 420px;
+  padding: 40px 56px 36px;
+}
+
+/* Logo */
+.kite-logo {
+  width: 64px;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+/* Title */
+.kite-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333333;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* Form group spacing */
+.kite-form {
+  margin-top: 28px;
+}
+
+.kite-form__group {
+  margin-bottom: 14px;
+  position: relative;
+}
+
+/* =============================================
+   Floating Label
+   ============================================= */
+
+.kite-label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: #aaaaaa;
+  pointer-events: none;
+  transition:
+    top 0.18s ease,
+    font-size 0.18s ease,
+    color 0.18s ease;
+  background: #ffffff;
+  padding: 0 4px;
+  line-height: 1;
+  z-index: 1;
+}
+
+/* Float up on focus (via parent :focus-within) */
+.kite-form__group:focus-within .kite-label {
+  top: 0;
+  font-size: 0.72rem;
+  color: #888888;
+}
+
+/* Float up when field already has a value (.has-value toggled in JSX) */
+.kite-form__group.has-value .kite-label {
+  top: 0;
+  font-size: 0.72rem;
+  color: #888888;
+}
+
+/* =============================================
+   Inputs
+   ============================================= */
+
+.kite-input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: #333;
+  padding: 10px 40px 10px 14px; /* right pad for eye icon */
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+
+/* No extra right padding on fields without an eye icon */
+.kite-input--plain {
+  padding-right: 14px;
+}
+
+/* Hide native placeholder — floating label replaces it */
+.kite-input::placeholder {
+  color: transparent;
+}
+
+.kite-input:focus {
+  border-color: #999999;
+}
+
+/* Eye icon */
+.kite-eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 2;
+  user-select: none;
+}
+
+/* Primary action button */
+.kite-btn {
+  display: block;
+  width: 100%;
+  height: 44px;
+  background-color: #f05b24;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.kite-btn:hover {
+  background-color: #e04e18;
+}
+
+.kite-btn:active {
+  background-color: #cc4412;
+  transform: scale(0.99);
+}
+
+/* Secondary / helper links */
+.kite-link {
+  font-size: 0.82rem;
+  color: #666666;
+  text-decoration: none;
+}
+
+.kite-link:hover {
+  color: #f05b24;
+  text-decoration: underline;
+}
+
+.kite-link--orange {
+  color: #f05b24;
+  font-weight: 500;
+}
+
+.kite-link--orange:hover {
+  color: #e04e18;
+}
+
+/* Inline helper text (forgot / already have account) */
+.kite-helper {
+  font-size: 0.82rem;
+  color: #666666;
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* =============================================
+   Footer
+   ============================================= */
+.kite-footer {
+  text-align: center;
+  padding: 12px 16px 28px;
+}
+
+.kite-footer__apps {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.kite-footer__apps a {
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.kite-footer__apps a:hover {
+  opacity: 1;
+}
+
+.kite-zerodha-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.kite-zerodha-text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #999999;
+  letter-spacing: 0.12em;
+}
+
+.kite-footer__signup {
+  font-size: 0.82rem;
+  color: #555555;
+  margin: 0 0 8px;
+}
+
+.kite-footer__link {
+  color: #555;
+  text-decoration: underline;
+  font-size: inherit;
+}
+
+.kite-footer__link:hover {
+  color: #f05b24;
+}
+
+.kite-footer__legal {
+  font-size: 0.7rem;
+  color: #999999;
+  max-width: 540px;
+  margin: 0 auto 6px;
+  line-height: 1.65;
+}
+
+.kite-version {
+  font-size: 0.7rem;
+  color: #bbbbbb;
+  margin: 0;
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 480px) {
+  .kite-card,
+  .kite-card--signup {
+    padding: 32px 24px 28px;
+    box-shadow: none;
+    border: 1px solid #e8e8e8;
+  }
+}

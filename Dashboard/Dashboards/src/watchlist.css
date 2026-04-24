@@ -1,0 +1,279 @@
+/* ============================================================
+   WATCHLIST — Zerodha Kite-style
+   Font: 'DM Mono' for numbers, 'DM Sans' for labels
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap");
+
+:root {
+  --bg-primary: #0e0f11;
+  --bg-row: #141519;
+  --bg-row-hover: #1c1e24;
+  --border: #23252d;
+
+  --text-primary: #e8eaf0;
+  --text-muted: #5c6070;
+  --text-label: #8b8fa8;
+
+  --up: #26a69a; /* teal — profit */
+  --down: #ef5350; /* red  — loss   */
+
+  --btn-buy-bg: #1565c0;
+  --btn-buy-hover: #1976d2;
+  --btn-sell-bg: #b71c1c;
+  --btn-sell-hover: #c62828;
+  --btn-neutral-bg: #1e2128;
+  --btn-neutral-hover: #2a2d38;
+  --btn-danger-bg: #1e2128;
+  --btn-danger-hover: #3a1a1a;
+
+  --shadow-row: 0 1px 0 var(--border);
+  --shadow-panel: 0 4px 16px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3);
+
+  --radius-btn: 6px;
+  --radius-container: 10px;
+
+  --transition-fast: 150ms ease;
+  --transition-med: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Container ─────────────────────────────────────────────── */
+
+.watchlist-container {
+  background: var(--bg-primary);
+  border-radius: var(--radius-container);
+  overflow-y: auto;
+  font-family: "DM Sans", sans-serif;
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+/* ── Search bar ─────────────────────────────────────────────── */
+
+.watchlist-container .search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: "DM Sans", sans-serif;
+  font-size: 12.5px;
+  caret-color: var(--up);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.watchlist-container .counts {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── List ───────────────────────────────────────────────────── */
+
+.watchlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Row ────────────────────────────────────────────────────── */
+
+.watchlist-item {
+  position: relative; /* anchor for absolute action panel */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  height: 46px;
+  box-shadow: var(--shadow-row);
+  background: var(--bg-row);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  overflow: hidden; /* keeps action panel clipped inside row bounds */
+  user-select: none;
+}
+
+.watchlist-item.hovered {
+  background: var(--bg-row-hover);
+}
+
+/* ── Stock name ─────────────────────────────────────────────── */
+
+.stock-name {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: color var(--transition-fast);
+}
+
+.stock-name.up {
+  color: var(--up);
+}
+.stock-name.down {
+  color: var(--down);
+}
+
+/* ── Price / percent info ───────────────────────────────────── */
+
+.watchlist-container .item-info {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  transition:
+    opacity var(--transition-med),
+    transform var(--transition-med);
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: none;
+}
+
+/* Fade info out when row is hovered → action panel takes its place */
+.watchlist-container .item-info.hidden {
+  opacity: 0;
+  transform: translateX(6px);
+  pointer-events: none;
+}
+
+.watchlist-container .percent {
+  color: var(--text-label);
+  margin-right: 2px;
+}
+
+.price.up {
+  color: var(--up);
+}
+.price.down {
+  color: var(--down);
+}
+
+.watchlist-container .up svg,
+.watchlist-container .up.MuiSvgIcon-root {
+  color: var(--up) !important;
+}
+.watchlist-container .down svg,
+.watchlist-container .down.MuiSvgIcon-root {
+  color: var(--down) !important;
+}
+
+/* ── Action panel ───────────────────────────────────────────── */
+
+.action-panel {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-med),
+    transform var(--transition-med);
+  z-index: 10;
+}
+
+.action-panel.visible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: all;
+}
+
+/* ── Action buttons wrapper ─────────────────────────────────── */
+
+.watchlist-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg-row-hover);
+  padding: 3px 5px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-panel);
+  border: 1px solid var(--border);
+}
+
+/* ── Individual icon buttons ────────────────────────────────── */
+
+.action-btn.MuiIconButton-root {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-btn) !important;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast) !important;
+}
+
+.action-btn.MuiIconButton-root:hover {
+  transform: scale(1.08);
+}
+
+/* Buy */
+.action-btn.buy.MuiIconButton-root {
+  background: var(--btn-buy-bg) !important;
+  color: #fff !important;
+}
+.action-btn.buy.MuiIconButton-root:hover {
+  background: var(--btn-buy-hover) !important;
+}
+
+/* Sell */
+.action-btn.sell.MuiIconButton-root {
+  background: var(--btn-sell-bg) !important;
+  color: #fff !important;
+}
+.action-btn.sell.MuiIconButton-root:hover {
+  background: var(--btn-sell-hover) !important;
+}
+
+/* Neutral (chart, depth, more) */
+.action-btn.neutral.MuiIconButton-root {
+  background: var(--btn-neutral-bg) !important;
+  color: var(--text-label) !important;
+}
+.action-btn.neutral.MuiIconButton-root:hover {
+  background: var(--btn-neutral-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Danger (delete) */
+.action-btn.danger.MuiIconButton-root {
+  background: var(--btn-danger-bg) !important;
+  color: var(--text-muted) !important;
+}
+.action-btn.danger.MuiIconButton-root:hover {
+  background: var(--btn-danger-hover) !important;
+  color: var(--down) !important;
+}
+
+/* ── MUI Tooltip tweak ──────────────────────────────────────── */
+
+.MuiTooltip-tooltip {
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 11px !important;
+  background: #2a2d38 !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 5px !important;
+  padding: 3px 8px !important;
+}
+
+.MuiTooltip-arrow::before {
+  background: #2a2d38 !important;
+  border: 1px solid var(--border) !important;
+}

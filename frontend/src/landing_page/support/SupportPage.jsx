@@ -1,16 +1,12 @@
 import React from "react";
-
-import Navbar from "../Navbar";
 import SupportHero from "./SupportHero";
-import SupportLayout from "./SupportLayout";
-import Footer from "../Footer";
+import CreateTicket from "./CreateTicket";
 
 function SupportPage() {
   return (
     <>
       <SupportHero />
-
-      <SupportLayout />
+      <CreateTicket />
     </>
   );
 }

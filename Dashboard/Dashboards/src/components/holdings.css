@@ -1,0 +1,364 @@
+/* ═══════════════════════════════════════════════════════════════════
+   HOLDINGS.CSS — Scoped upgrade layer (never modifies index.css)
+   Mirrors positions.css patterns, scoped under .holdings-page
+   All tokens inherited from :root in index.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Shell ─────────────────────────────────────────────────── */
+.holdings-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  animation: h-fade-in 240ms ease both;
+}
+
+@keyframes h-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Page Header ────────────────────────────────────────────────── */
+.holdings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.holdings-header .title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.holdings-count-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── Summary Cards ──────────────────────────────────────────────── */
+.holdings-summary {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.h-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  transition:
+    border-color var(--t-med),
+    box-shadow var(--t-med);
+  position: relative;
+  overflow: hidden;
+}
+
+.h-card:hover {
+  border-color: #334155;
+  box-shadow: var(--shadow-card);
+}
+
+/* P&L card accent top border */
+.h-card.pnl-positive {
+  border-top: 2px solid var(--profit);
+}
+.h-card.pnl-negative {
+  border-top: 2px solid var(--loss);
+}
+
+.h-card-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: var(--space-sm);
+}
+
+.h-card-value {
+  font-family: "DM Mono", monospace;
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.h-card-value.profit {
+  color: var(--profit);
+}
+.h-card-value.loss {
+  color: var(--loss);
+}
+
+.h-card-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.h-pnl-percent {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.h-pnl-percent.profit {
+  background: var(--profit-bg);
+  color: var(--profit);
+  border: 1px solid var(--profit-border);
+}
+.h-pnl-percent.loss {
+  background: var(--loss-bg);
+  color: var(--loss);
+  border: 1px solid var(--loss-border);
+}
+
+.h-card-sub-text {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─── Table Wrapper ──────────────────────────────────────────────── */
+.holdings-table-wrap {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+/* ─── Table ──────────────────────────────────────────────────────── */
+.holdings-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+/* ─── Table Head ─────────────────────────────────────────────────── */
+.holdings-tbl thead tr {
+  background: var(--bg-secondary);
+}
+
+.holdings-tbl th {
+  padding: 11px 14px;
+  text-align: right;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-soft);
+  user-select: none;
+}
+
+.holdings-tbl th:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+.holdings-tbl th:last-child {
+  padding-right: 20px;
+}
+
+/* separator after Instrument and LTP columns */
+.holdings-tbl th:nth-child(1),
+.holdings-tbl td:nth-child(1) {
+  border-right: 1px solid var(--border-soft);
+}
+.holdings-tbl th:nth-child(4),
+.holdings-tbl td:nth-child(4) {
+  border-right: 1px solid var(--border-soft);
+}
+
+/* ─── Table Body / Rows ──────────────────────────────────────────── */
+.holdings-tbl td {
+  padding: 12px 14px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-soft);
+  transition: background var(--t-fast);
+}
+.holdings-tbl td:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+.holdings-tbl td:last-child {
+  padding-right: 20px;
+}
+
+.holdings-tbl tbody tr:last-child td {
+  border-bottom: none;
+}
+.holdings-tbl tbody tr:hover td {
+  background: var(--bg-row-hover);
+}
+
+.holdings-tbl td.profit {
+  color: var(--profit) !important;
+}
+.holdings-tbl td.loss {
+  color: var(--loss) !important;
+}
+
+/* ─── Best / Worst Row Highlights ───────────────────────────────── */
+.h-row-best td {
+  background: rgba(34, 197, 94, 0.04);
+}
+.h-row-best:hover td {
+  background: rgba(34, 197, 94, 0.08) !important;
+}
+.h-row-best td:first-child {
+  box-shadow: inset 2px 0 0 var(--profit);
+}
+
+.h-row-worst td {
+  background: rgba(239, 68, 68, 0.04);
+}
+.h-row-worst:hover td {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+.h-row-worst td:first-child {
+  box-shadow: inset 2px 0 0 var(--loss);
+}
+
+/* ─── Instrument Cell ────────────────────────────────────────────── */
+.h-instrument-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* LONG badge — holdings are always long positions */
+.h-side-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  background: rgba(65, 132, 243, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(65, 132, 243, 0.28);
+}
+
+.h-instrument-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+/* ─── Monospace numerics ─────────────────────────────────────────── */
+.h-mono {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+}
+
+/* ─── LTP Cell + Flash ───────────────────────────────────────────── */
+.h-ltp-cell {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-radius: 4px;
+  transition:
+    background 80ms ease,
+    color 80ms ease;
+}
+
+@keyframes h-flash-up {
+  0% {
+    background: rgba(34, 197, 94, 0.3);
+    color: var(--profit);
+  }
+  100% {
+    background: transparent;
+    color: var(--text-primary);
+  }
+}
+
+@keyframes h-flash-down {
+  0% {
+    background: rgba(239, 68, 68, 0.3);
+    color: var(--loss);
+  }
+  100% {
+    background: transparent;
+    color: var(--text-primary);
+  }
+}
+
+.h-ltp-cell.flash-up {
+  animation: h-flash-up 500ms ease forwards;
+}
+.h-ltp-cell.flash-down {
+  animation: h-flash-down 500ms ease forwards;
+}
+
+/* ─── P&L Cell with Intensity Backgrounds ───────────────────────── */
+.h-pnl-cell {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 3px 6px !important;
+  white-space: nowrap;
+}
+
+.h-pnl-cell.profit {
+  color: var(--profit);
+}
+.h-pnl-cell.loss {
+  color: var(--loss);
+}
+
+.h-pnl-cell.intensity-low.profit {
+  background: rgba(34, 197, 94, 0.05);
+}
+.h-pnl-cell.intensity-medium.profit {
+  background: rgba(34, 197, 94, 0.1);
+}
+.h-pnl-cell.intensity-high.profit {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.h-pnl-cell.intensity-low.loss {
+  background: rgba(239, 68, 68, 0.05);
+}
+.h-pnl-cell.intensity-medium.loss {
+  background: rgba(239, 68, 68, 0.1);
+}
+.h-pnl-cell.intensity-high.loss {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+/* ─── Change % cells ─────────────────────────────────────────────── */
+.h-change-cell {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}

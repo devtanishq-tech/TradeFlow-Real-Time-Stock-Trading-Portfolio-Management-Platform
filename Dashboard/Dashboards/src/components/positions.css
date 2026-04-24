@@ -1,0 +1,533 @@
+/* ═══════════════════════════════════════════════════════════════════
+   POSITIONS.CSS — Scoped upgrade layer (never modifies index.css)
+   Inherits all tokens from :root defined in index.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Page Shell ─────────────────────────────────────────────────── */
+.positions-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  animation: pos-fade-in 240ms ease both;
+}
+
+@keyframes pos-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Page Header ────────────────────────────────────────────────── */
+.positions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.positions-header .title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.positions-count-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.positions-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast),
+    background var(--t-fast);
+  outline: none;
+}
+.positions-sort-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+  background: var(--bg-row-hover);
+}
+.positions-sort-btn svg {
+  transition: transform 200ms ease;
+}
+.positions-sort-btn.asc svg {
+  transform: rotate(180deg);
+}
+
+/* ─── Summary Cards Row ──────────────────────────────────────────── */
+.positions-summary {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.pos-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  transition:
+    border-color var(--t-med),
+    box-shadow var(--t-med);
+  position: relative;
+  overflow: hidden;
+}
+.pos-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--t-med);
+}
+.pos-card:hover {
+  border-color: #334155;
+  box-shadow: var(--shadow-card);
+}
+
+/* Total P&L card accent line */
+.pos-card.pnl-positive {
+  border-top: 2px solid var(--profit);
+}
+.pos-card.pnl-negative {
+  border-top: 2px solid var(--loss);
+}
+
+.pos-card-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pos-card-label .card-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+}
+
+.pos-card-value {
+  font-family: "DM Mono", monospace;
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.pos-card-value.profit {
+  color: var(--profit);
+}
+.pos-card-value.loss {
+  color: var(--loss);
+}
+
+.pos-card-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.pos-pnl-percent {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.pos-pnl-percent.profit {
+  background: var(--profit-bg);
+  color: var(--profit);
+  border: 1px solid var(--profit-border);
+}
+.pos-pnl-percent.loss {
+  background: var(--loss-bg);
+  color: var(--loss);
+  border: 1px solid var(--loss-border);
+}
+
+.pos-card-sub-text {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Best/Worst performer cards */
+.pos-performer-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pos-performer-pnl {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+.pos-performer-pnl.profit {
+  color: var(--profit);
+}
+.pos-performer-pnl.loss {
+  color: var(--loss);
+}
+
+.pos-performer-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ─── Table Wrapper ──────────────────────────────────────────────── */
+.positions-table-wrap {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.positions-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+/* ─── Table Head ─────────────────────────────────────────────────── */
+.positions-table thead tr {
+  background: var(--bg-secondary);
+}
+
+.positions-table th {
+  padding: 11px 14px;
+  text-align: right;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-soft);
+  user-select: none;
+}
+.positions-table th:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+.positions-table th:last-child {
+  padding-right: 20px;
+}
+
+/* separator columns */
+.positions-table th:nth-child(2),
+.positions-table td:nth-child(2) {
+  border-right: 1px solid var(--border-soft);
+}
+
+/* ─── Table Body / Rows ──────────────────────────────────────────── */
+.positions-table td {
+  padding: 12px 14px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-soft);
+  transition: background var(--t-fast);
+}
+.positions-table td:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+.positions-table td:last-child {
+  padding-right: 20px;
+}
+
+.positions-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.positions-table tbody tr:hover td {
+  background: var(--bg-row-hover);
+}
+
+.positions-table td.profit {
+  color: var(--profit) !important;
+}
+.positions-table td.loss {
+  color: var(--loss) !important;
+}
+
+/* ─── Best / Worst Row Highlight ─────────────────────────────────── */
+.pos-row-best td {
+  background: rgba(34, 197, 94, 0.04);
+}
+.pos-row-best:hover td {
+  background: rgba(34, 197, 94, 0.08) !important;
+}
+.pos-row-best td:first-child {
+  box-shadow: inset 2px 0 0 var(--profit);
+}
+
+.pos-row-worst td {
+  background: rgba(239, 68, 68, 0.04);
+}
+.pos-row-worst:hover td {
+  background: rgba(239, 68, 68, 0.08) !important;
+}
+.pos-row-worst td:first-child {
+  box-shadow: inset 2px 0 0 var(--loss);
+}
+
+/* ─── Instrument Cell ────────────────────────────────────────────── */
+.pos-instrument-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pos-side-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.pos-side-badge.buy {
+  background: rgba(65, 132, 243, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(65, 132, 243, 0.28);
+}
+.pos-side-badge.sell {
+  background: var(--loss-bg);
+  color: var(--loss);
+  border: 1px solid var(--loss-border);
+}
+
+.pos-instrument-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+/* ─── Product Badge ──────────────────────────────────────────────── */
+.pos-product-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(65, 132, 243, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(65, 132, 243, 0.2);
+}
+
+/* ─── Monospace numerics ─────────────────────────────────────────── */
+.pos-mono {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+}
+
+/* ─── LTP + Flash ────────────────────────────────────────────────── */
+.pos-ltp-cell {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-radius: 4px;
+  transition:
+    background 80ms ease,
+    color 80ms ease;
+}
+
+@keyframes flash-up {
+  0% {
+    background: rgba(34, 197, 94, 0.3);
+    color: var(--profit);
+  }
+  100% {
+    background: transparent;
+    color: var(--text-primary);
+  }
+}
+@keyframes flash-down {
+  0% {
+    background: rgba(239, 68, 68, 0.3);
+    color: var(--loss);
+  }
+  100% {
+    background: transparent;
+    color: var(--text-primary);
+  }
+}
+
+.pos-ltp-cell.flash-up {
+  animation: flash-up 500ms ease forwards;
+}
+.pos-ltp-cell.flash-down {
+  animation: flash-down 500ms ease forwards;
+}
+
+/* ─── P&L Cell with Intensity ────────────────────────────────────── */
+.pos-pnl-cell {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 3px 6px !important;
+  white-space: nowrap;
+}
+/* Intensity classes applied via inline opacity-aware backgrounds */
+.pos-pnl-cell.profit {
+  color: var(--profit);
+}
+.pos-pnl-cell.loss {
+  color: var(--loss);
+}
+.pos-pnl-cell.intensity-low.profit {
+  background: rgba(34, 197, 94, 0.05);
+}
+.pos-pnl-cell.intensity-medium.profit {
+  background: rgba(34, 197, 94, 0.1);
+}
+.pos-pnl-cell.intensity-high.profit {
+  background: rgba(34, 197, 94, 0.18);
+}
+.pos-pnl-cell.intensity-low.loss {
+  background: rgba(239, 68, 68, 0.05);
+}
+.pos-pnl-cell.intensity-medium.loss {
+  background: rgba(239, 68, 68, 0.1);
+}
+.pos-pnl-cell.intensity-high.loss {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+/* ─── Exit Button ────────────────────────────────────────────────── */
+.pos-exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast),
+    background var(--t-fast),
+    box-shadow var(--t-fast);
+  outline: none;
+  white-space: nowrap;
+}
+.pos-exit-btn:hover {
+  color: var(--loss);
+  border-color: var(--loss-border);
+  background: var(--loss-bg);
+  box-shadow: 0 0 0 1px var(--loss-border);
+}
+.pos-exit-btn:active {
+  transform: scale(0.97);
+}
+
+/* ─── Empty State ────────────────────────────────────────────────── */
+.positions-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px var(--space-lg);
+  gap: var(--space-md);
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.positions-empty-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+
+.positions-empty h4 {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.positions-empty p {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 260px;
+}
+
+/* ─── Skeleton loader (optional, keeps layout stable on fetch) ───── */
+.pos-skeleton {
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-elevated) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  height: 12px;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

@@ -4,12 +4,6 @@ import React from "react";
 import Navbar from "../Navbar"; // adjust path if needed
 import SignUpHero from "./SignUpHero";
 import InvestmentOptions from "./InvestmentOptions";
-import StepsSection from "./StepsSection";
-import Benefits from "./Benefits";
-import AccountTypes from "./AccountTypes";
-import FAQs from "./FAQs";
-import OpenAccount from "../OpenAccount";
-import Footer from "../Footer"; // adjust path if needed
 
 function SignUpPage() {
   return (
@@ -18,7 +12,7 @@ function SignUpPage() {
 
       <InvestmentOptions />
 
-      <StepsSection />
+      {/* <StepsSection />
 
       <Benefits />
 
@@ -26,7 +20,7 @@ function SignUpPage() {
 
       <FAQs />
 
-      <OpenAccount />
+      <OpenAccount /> */}
     </>
   );
 }

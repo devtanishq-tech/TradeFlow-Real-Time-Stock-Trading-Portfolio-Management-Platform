@@ -1,0 +1,616 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ORDER.CSS — Premium Orders Page  (tokens from index.css only)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Page shell ────────────────────────────────────────────────── */
+.orders {
+  padding: var(--space-lg);
+  background: var(--bg-base);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ─── Sticky header ─────────────────────────────────────────────── */
+.orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-base);
+  /* slight blur bleed so table rows don't show through sharply */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.orders-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.orders-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.orders-count {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.orders-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ─── Search box ────────────────────────────────────────────────── */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 32px 7px 30px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  color: var(--text-primary);
+  width: 210px;
+  transition:
+    border-color var(--t-fast),
+    box-shadow var(--t-fast),
+    width var(--t-med);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(65, 132, 243, 0.12);
+  width: 240px;
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  line-height: 1;
+  transition: color var(--t-fast);
+}
+
+.search-clear:hover {
+  color: var(--text-primary);
+}
+
+/* ─── Filter tabs ───────────────────────────────────────────────── */
+.filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+
+.filter-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 13px;
+  border: none;
+  border-radius: calc(var(--radius-sm) - 2px);
+  background: transparent;
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.filter-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.filter-tab-active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.tab-badge {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 20px;
+  letter-spacing: 0;
+}
+
+.tab-badge-buy {
+  background: rgba(65, 132, 243, 0.15);
+  color: var(--accent);
+}
+
+.tab-badge-sell {
+  background: var(--loss-bg);
+  color: var(--loss);
+}
+
+/* ─── Table wrapper (horizontal scroll) ────────────────────────── */
+.order-table-wrap {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  overflow-y: auto; /* ← key fix: own vertical scroll */
+  max-height: calc(
+    100vh - 140px
+  ); /* ← topbar(48) + orders-header(73) + gap(19) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.order-table-wrap::-webkit-scrollbar {
+  width: 4px; /* ← ADD: vertical scrollbar */
+  height: 4px;
+}
+.order-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* ─── Table base ────────────────────────────────────────────────── */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+/* ─── Header row ────────────────────────────────────────────────── */
+.order-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.order-table thead tr {
+  background: var(--bg-secondary);
+}
+
+.order-table th {
+  padding: 10px 14px;
+  text-align: right;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-bottom: 1px solid var(--border-soft);
+  user-select: none;
+}
+
+.order-table th:first-child {
+  padding-left: 18px;
+  text-align: left;
+  width: 36px;
+}
+
+.order-table th:nth-child(4) {
+  text-align: left;
+  padding-left: 18px;
+}
+
+.order-table th:last-child {
+  padding-right: 18px;
+}
+
+.th-sortable {
+  cursor: pointer;
+  transition: color var(--t-fast);
+}
+
+.th-sortable:hover {
+  color: var(--text-primary);
+}
+
+.th-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sort-icon {
+  font-size: 10px;
+  font-family: "DM Mono", monospace;
+  transition: color var(--t-fast);
+}
+
+.sort-idle {
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+.sort-asc,
+.sort-desc {
+  color: var(--accent);
+}
+
+/* Vertical dividers after col 1 and col 4 */
+.order-table th:nth-child(1),
+.order-table td:nth-child(1) {
+  border-right: 1px solid var(--border-soft);
+}
+
+.order-table th:nth-child(4),
+.order-table td:nth-child(4) {
+  border-right: 1px solid var(--border-soft);
+}
+
+/* ─── Body rows ─────────────────────────────────────────────────── */
+.order-table td {
+  padding: 12px 14px;
+  text-align: right;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-soft);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.order-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Zebra striping */
+.order-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.012);
+}
+
+/* Row hover — subtle lift */
+.order-row {
+  transition: box-shadow var(--t-fast);
+}
+
+.order-row:hover td {
+  background: var(--bg-row-hover) !important;
+}
+
+.order-row:hover td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+/* ─── Column-specific alignment / typography ────────────────────── */
+.col-check {
+  text-align: left !important;
+  padding-left: 18px !important;
+  width: 36px;
+}
+
+.col-time {
+  font-family: "DM Mono", monospace;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  text-align: left !important;
+}
+
+.col-type {
+  text-align: left !important;
+}
+
+.col-instrument {
+  text-align: left !important;
+  padding-left: 18px !important;
+}
+
+.instrument-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.instrument-exchange {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-top: 1px;
+}
+
+.col-mono {
+  font-family: "DM Mono", monospace;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.col-ltp {
+  position: relative;
+  transition:
+    color var(--t-fast),
+    background var(--t-fast) !important;
+}
+
+/* ─── Price flash ───────────────────────────────────────────────── */
+@keyframes flash-up {
+  0% {
+    background: rgba(34, 197, 94, 0.22);
+    color: var(--profit);
+  }
+  70% {
+    background: rgba(34, 197, 94, 0.08);
+    color: var(--profit);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+@keyframes flash-down {
+  0% {
+    background: rgba(239, 68, 68, 0.22);
+    color: var(--loss);
+  }
+  70% {
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--loss);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.flash-up {
+  animation: flash-up 0.6s ease-out forwards;
+}
+
+.flash-down {
+  animation: flash-down 0.6s ease-out forwards;
+}
+
+/* ─── P&L ───────────────────────────────────────────────────────── */
+.pnl-value {
+  font-family: "DM Mono", monospace;
+  font-weight: 500;
+}
+
+.order-table td.profit {
+  color: var(--profit);
+}
+
+.order-table td.loss {
+  color: var(--loss);
+}
+
+/* ─── BUY / SELL badge ──────────────────────────────────────────── */
+.type-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.badge-buy {
+  background: rgba(65, 132, 243, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(65, 132, 243, 0.22);
+}
+
+.badge-sell {
+  background: var(--loss-bg);
+  color: var(--loss);
+  border: 1px solid var(--loss-border);
+}
+
+/* ─── Status chip ───────────────────────────────────────────────── */
+.col-status {
+  padding-right: 18px !important;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  background: var(--profit-bg);
+  border: 1px solid var(--profit-border);
+  border-radius: 20px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--profit);
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--profit);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.7);
+  }
+}
+
+/* ─── Custom checkbox ───────────────────────────────────────────── */
+.checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-wrap input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-box {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--border-medium);
+  border-radius: 3px;
+  background: var(--bg-secondary);
+  transition:
+    border-color var(--t-fast),
+    background var(--t-fast),
+    box-shadow var(--t-fast);
+  position: relative;
+}
+
+.checkbox-wrap:hover .checkbox-box {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(65, 132, 243, 0.1);
+}
+
+.checkbox-wrap input:checked ~ .checkbox-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-wrap input:checked ~ .checkbox-box::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 3.5px;
+  width: 4px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ─── Empty row (no search results) ────────────────────────────── */
+.empty-row {
+  text-align: center !important;
+  padding: 48px 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 12px !important;
+  font-style: italic;
+}
+
+/* ─── Loading state ─────────────────────────────────────────────── */
+.orders-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 200px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Empty / no-orders state ───────────────────────────────────── */
+.no-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 55vh;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.no-orders-icon {
+  color: var(--border);
+  margin-bottom: var(--space-sm);
+}
+
+.no-orders-title {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.no-orders-sub {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 240px;
+  line-height: 1.6;
+}
+
+.no-orders-cta {
+  margin-top: var(--space-sm);
+}

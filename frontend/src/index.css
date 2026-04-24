@@ -117,3 +117,149 @@ code {
   font-size: 1.75rem;
   line-height: 1.25;
 }
+#supportHero {
+  background-color: #387ed1;
+  color: white;
+  padding: 10px 0 40px 0;
+}
+
+#supportWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 220px;
+  margin-bottom: 30px;
+}
+
+#supportContent {
+  padding: 20px 220px;
+  margin: 0;
+}
+
+#supportHeading {
+  font-size: 1.9rem;
+  font-weight: 300;
+  line-height: 1.35;
+  margin-bottom: 28px;
+}
+
+#supportInput {
+  width: 100%;
+  padding: 18px 22px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  color: #888;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#supportLinks {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+#supportFeatured {
+  padding-left: 60px;
+}
+
+#supportFeatured h3 {
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+#supportFeatured ol {
+  padding-left: 20px;
+  line-height: 2.4;
+}
+
+#supportHero a {
+  color: white;
+  text-decoration: underline;
+}
+
+#supportHero a:hover {
+  opacity: 0.75;
+}
+/* ── Investment Options Section ── */
+/* ── Investment Options Section ── */ /* ── Investment Options Section ── */
+/* ── Investment Options Section ── */
+/* ── Investment Options Section ── */
+/* ── Investment Options Section ── */ /* ── Investment Options Section ── */
+/* ── Investment Options Section ── */
+/* ── Investment Options Section ── */
+/* ── Investment Options Section ── */
+.investment-section {
+  padding: 72px 0 80px;
+  background-color: #fff;
+}
+
+.investment-section__heading {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 500;
+  color: #424242;
+  text-align: center;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+
+.investment-card {
+  gap: 20px;
+}
+
+.investment-card__icon {
+  width: 100px; /* ← was 80px */
+  height: 100px; /* ← was 80px */
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.investment-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 6px;
+}
+
+.investment-card__desc {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 220px;
+}
+
+.investment-section__cta {
+  background-color: #387ed1;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 13px 44px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: background-color 0.18s ease;
+}
+
+.investment-section__cta:hover {
+  background-color: #2f6dbf;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .investment-card {
+    max-width: 100%;
+  }
+
+  .investment-card__desc {
+    max-width: unset;
+  }
+
+  .investment-section__cta {
+    width: 100%;
+  }
+}

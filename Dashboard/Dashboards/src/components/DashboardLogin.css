@@ -1,0 +1,178 @@
+/* =============================================
+   Kite Login Page — DashboardLogin.css
+   Pixel-perfect replication of Zerodha Kite
+   ============================================= */
+
+/* Page background */
+.kite-page {
+  background-color: #f2f2f2;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+/* Card container */
+.kite-card {
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  padding: 48px 56px 40px;
+  width: 100%;
+  max-width: 380px;
+}
+
+/* Kite logo */
+.kite-logo {
+  width: 64px;
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+/* Title */
+.kite-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Inputs */
+.kite-input {
+  height: 44px;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  padding: 10px 14px;
+  background-color: #fff;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.kite-input::placeholder {
+  color: #aaaaaa;
+  font-size: 0.875rem;
+}
+
+.kite-input:focus {
+  border-color: #999;
+  box-shadow: none;
+  outline: none;
+}
+
+/* Eye icon inside password field */
+.kite-eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 2;
+}
+
+/* Login button */
+.kite-btn-login {
+  background-color: #f05b24;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  height: 44px;
+  border: none;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  transition: background-color 0.2s ease;
+}
+
+.kite-btn-login:hover {
+  background-color: #e04e18;
+  color: #fff;
+}
+
+.kite-btn-login:active {
+  background-color: #cc4412;
+  color: #fff;
+}
+
+/* Forgot link */
+.kite-forgot-link {
+  font-size: 0.82rem;
+  color: #666666;
+  text-decoration: none;
+}
+
+.kite-forgot-link:hover {
+  color: #f05b24;
+  text-decoration: underline;
+}
+
+/* =============================================
+   Footer
+   ============================================= */
+.kite-footer {
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.kite-zerodha-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kite-zerodha-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #999999;
+  letter-spacing: 0.12em;
+}
+
+.kite-footer-signup {
+  font-size: 0.82rem;
+  color: #555555;
+  margin-bottom: 6px;
+}
+
+.kite-footer-link {
+  color: #555;
+  text-decoration: underline;
+  font-size: inherit;
+}
+
+.kite-footer-link:hover {
+  color: #f05b24;
+}
+
+.kite-footer-legal {
+  font-size: 0.72rem;
+  color: #999999;
+  max-width: 520px;
+  margin: 0 auto 4px;
+  line-height: 1.6;
+}
+
+.kite-version {
+  font-size: 0.72rem;
+  color: #bbbbbb;
+  margin: 0;
+}
+
+/* =============================================
+   Responsive tweaks
+   ============================================= */
+@media (max-width: 480px) {
+  .kite-card {
+    padding: 36px 24px 32px;
+    margin: 0 16px;
+    box-shadow: none;
+    border: 1px solid #e8e8e8;
+  }
+}

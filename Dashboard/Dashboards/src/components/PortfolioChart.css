@@ -1,0 +1,32 @@
+/* PortfolioChart.css */
+
+/* ─── Wrapper: dark background — THIS is what was missing ── */
+.pchart-wrapper {
+  width: 100%;
+  background: #131313; /* matches Image 1 dark bg */
+  border-radius: 4px 4px 0 0; /* flush with Summary panel top */
+  padding: 4px 0 0;
+}
+
+/* ─── Tooltip ─────────────────────────────────────────────── */
+.pchart-tooltip {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px 14px;
+  min-width: 80px;
+}
+
+.pchart-tooltip__label {
+  font-size: 11px;
+  color: #888;
+  margin: 0 0 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pchart-tooltip__value {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
