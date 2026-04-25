@@ -561,4 +561,4 @@ setInterval(() => {
       client.send(JSON.stringify(updates));
     }
   });
-}, 7000);
+}, 4000);
