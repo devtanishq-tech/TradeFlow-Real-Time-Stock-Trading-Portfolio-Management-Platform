@@ -12,7 +12,7 @@ const WebSockets = require("ws");
 const DataHolding = require("./init/HoldingData.js");
 const express = require("express");
 const app = express();
-const port = process.env.PORT || "8080";
+const port = process.env.PORT || 8080;
 const MONGOURL = process.env.MONGO_URL;
 
 const cors = require("cors");
@@ -55,7 +55,10 @@ main();
 //   model: "Sell",
 // });
 // orderDummy.save();
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+//=============================================================================
+// const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+//============================================================================
+const allowedOrigins = process.env.CLIENT_URL.split(",");
 
 app.use(
   cors({
@@ -121,8 +124,10 @@ app.post("/login", async (req, res) => {
     const token = generateToken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
+      // secure: false,
+      // sameSite: "lax",
     });
     res.status(200).json({ message: "Login successfully", user });
   } catch (err) {
@@ -484,39 +489,6 @@ Worst: ${worstStock.name} (₹${Math.round(worstStock.pnl)})`,
 //=====================================================================================
 //======================Web Socket Server Creation HERE==================================
 
-const clients = []; // this will store the all connected users  in the clients array
-
-const wss = new WebSockets.Server({ port: 8081 }); // this is will create the web socket server
-
-wss.on("connection", (ws) => {
-  // here this ws is the user
-  // means any frontend user try to connect ,
-  console.log("🟢 Frontend connected"); // run this cmd , yes a users has connected
-
-  clients.push(ws); // this is used to save that user into the client array
-
-  ws.on("close", () => {
-    console.log("🔴 Frontend disconnected");
-    const index = clients.indexOf(ws);
-    if (index > -1) clients.splice(index, 1);
-  });
-});
-//======================Forwarding Data to the frontend ================================
-// 🔥 MOCK MARKET ENGINE LOOP
-setInterval(() => {
-  const updates = simulatePriceUpdate();
-
-  // console.log("📡 Mock updates:", updates); // DEBUG
-
-  clients.forEach((client) => {
-    if (client.readyState === WebSockets.OPEN) {
-      // if connnection active then send data to the frontend
-      client.send(JSON.stringify(updates)); // this will send data continioulsy to the frontend 4
-      // this where we are sending data to the frontend side
-    }
-  });
-}, 10000);
-
 // app.post("/addHolding", async (req, res) => {
 //   await Holdings.deleteMany({});
 //   await Holdings.insertMany(DataHolding);
@@ -557,6 +529,36 @@ setInterval(() => {
 //     res.status(500).json({ error: errr.message });
 //   }
 // });
-app.listen(port, () => {
+const clients = [];
+
+// Step 1: Start Express server
+const server = app.listen(port, () => {
   console.log(`🚀 Server started at port ${port}`);
 });
+
+// Step 2: Attach WebSocket to SAME server
+const wss = new WebSockets.Server({ server });
+
+// Step 3: Handle connections
+wss.on("connection", (ws) => {
+  console.log("🟢 Frontend connected");
+
+  clients.push(ws); // 🔥 YOU MISSED THIS
+
+  ws.on("close", () => {
+    console.log("🔴 Frontend disconnected");
+    const index = clients.indexOf(ws);
+    if (index > -1) clients.splice(index, 1);
+  });
+});
+
+// Step 4: Send live updates
+setInterval(() => {
+  const updates = simulatePriceUpdate();
+
+  clients.forEach((client) => {
+    if (client.readyState === WebSockets.OPEN) {
+      client.send(JSON.stringify(updates));
+    }
+  });
+}, 7000);
