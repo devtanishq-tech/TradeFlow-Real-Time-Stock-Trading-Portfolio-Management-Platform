@@ -1,6 +1,6 @@
 import React from "react";
 import { watchlist } from "../data/data";
-import WatchListItems from "./WatchListItems.";
+import WatchListItems from "./WatchListItems";
 
 const WatchList = ({ livePrices }) => {
   const updateLivePrice = watchlist.map((stock) => {
