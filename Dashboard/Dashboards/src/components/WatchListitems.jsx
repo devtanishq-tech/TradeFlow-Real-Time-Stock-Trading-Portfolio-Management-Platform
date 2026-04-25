@@ -3,7 +3,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
 import WatchListAction from "./WatchListAction";
 
-export default function WatchListItems({ stock }) {
+export default function WatchListitems({ stock }) {
   // this will track of those , about which element is Hovered
   // it will keep track of those items, where hovering occur
   const [isHovered, setIsHovered] = useState(false);

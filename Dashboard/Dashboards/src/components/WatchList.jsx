@@ -1,6 +1,6 @@
 import React from "react";
 import { watchlist } from "../data/data";
-import WatchListItems from "./WatchListItems";
+import WatchListitems from "./WatchListitems";
 
 const WatchList = ({ livePrices }) => {
   const updateLivePrice = watchlist.map((stock) => {
@@ -31,7 +31,7 @@ const WatchList = ({ livePrices }) => {
 
       <ul className="watchlist">
         {updateLivePrice.map((stock, idx) => (
-          <WatchListItems stock={stock} key={idx} />
+          <WatchListitems stock={stock} key={idx} />
         ))}
       </ul>
     </div>
