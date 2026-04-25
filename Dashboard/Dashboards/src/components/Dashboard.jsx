@@ -13,6 +13,8 @@ import axios from "axios";
 import AIChatAssistant from "./AIChatAssistant";
 
 const Dashboard = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
+  const WS_URL = import.meta.env.VITE_WS_URL;
   const [holdings, setHoldings] = useState([]); // cuz data comes from the hold are in array State
   const [livePrices, setlivePrices] = useState({});
   const [portfolioHistory, setPortfolioHistory] = useState([]);
@@ -47,7 +49,7 @@ const Dashboard = () => {
   // ===========================================Calculation of Holding occur ==------------------------------------------
   useEffect(() => {
     axios
-      .get("http://localhost:8080/holdings", { withCredentials: true })
+      .get(`${BASE_URL}/holdings`, { withCredentials: true })
       .then((res) => {
         setHoldings(res.data);
       })
@@ -57,7 +59,7 @@ const Dashboard = () => {
   }, []);
   useEffect(() => {
     // webSockert already stores in the browserx
-    const ws = new WebSocket("ws://localhost:8081");
+    const ws = new WebSocket(WS_URL);
 
     ws.onopen = () => {
       console.log("🟢 Connected to backend WebSocket");

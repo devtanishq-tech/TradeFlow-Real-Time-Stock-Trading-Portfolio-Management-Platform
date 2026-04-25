@@ -47,6 +47,7 @@ const EyeIcon = ({ open }) =>
   );
 
 const DashboardLogin = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   // flash store the message
   const [flash, setflash] = useState("");
   const [show, setshow] = useState(false);

@@ -3,6 +3,7 @@ import axios from "axios";
 import "./AIChatAssistant.css";
 
 const AIChatAssistant = ({ livePrices, holdings }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [open, setOpen] = useState(false);
   const [message, setmessage] = useState("");
   const [messages, setmessages] = useState([]);
@@ -49,7 +50,7 @@ const AIChatAssistant = ({ livePrices, holdings }) => {
 
     try {
       let res = await axios.post(
-        "http://localhost:8080/aiChat",
+        `${BASE_URL}/aiChat`,
         {
           message: userData.text,
           holdings,

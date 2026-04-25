@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 const ProtectedRoute = ({ children }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [loading, setloading] = useState(true);
   const [isloggedin, setisloggedin] = useState(false);
   useEffect(() => {
     axios
-      .get("http://localhost:8080/auth/me", { withCredentials: true })
+      .get(`${BASE_URL}/auth/me`, { withCredentials: true })
       .then(() => {
         setloading(false);
         setisloggedin(true);

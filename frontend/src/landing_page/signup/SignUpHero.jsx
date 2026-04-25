@@ -25,7 +25,9 @@ function SignUpHero() {
 
     try {
       // 2. 🔥 CALL BACKEND (THIS IS YOUR FETCH LINE)
-      const res = await fetch("http://localhost:8080/send-otp", {
+      // ===================Backend URL==============================
+      const BASE_URL = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${BASE_URL}/send-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +48,8 @@ function SignUpHero() {
       setVerified(true);
 
       // 5. 🔥 NAVIGATE TO NEXT PAGE
-      window.open(`http://localhost:5174/signup?mobile=${mobile}`, "_blank");
+      const DASHBOARD_URL = import.meta.env.VITE_DASHBOARD_URL;
+      window.open(`${DASHBOARD_URL}/signup?mobile=${mobile}`, "_blank");
       // window.open(`/dashboard/signup?mobile=${mobile}`, "_blank");
     } catch (err) {
       setError("Server error. Try again.", err);

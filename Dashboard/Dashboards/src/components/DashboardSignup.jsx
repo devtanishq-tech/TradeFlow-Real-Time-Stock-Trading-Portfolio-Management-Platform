@@ -45,6 +45,7 @@ const EyeIcon = ({ open }) =>
   );
 
 const DashboardSignup = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -67,7 +68,7 @@ const DashboardSignup = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/signup", {
+      const res = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

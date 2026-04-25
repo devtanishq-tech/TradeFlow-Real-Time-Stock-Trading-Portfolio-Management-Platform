@@ -5,13 +5,14 @@ import FundsAdd from "./FundsAdd";
 import FundsWithdraw from "./FundsWithdraw";
 
 const Funds = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [funds, setFunds] = useState(null); // keep track of overall funds data comes from the backend
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
 
   const fetchFunds = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/funds", {
+      const res = await axios.get(`${BASE_URL}/funds`, {
         withCredentials: true,
       });
       setFunds(res.data);

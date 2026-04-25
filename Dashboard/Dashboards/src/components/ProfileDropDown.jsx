@@ -14,15 +14,12 @@ import {
 import "./DropDown.css";
 
 const ProfileDropDown = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        "http://localhost:8080/logout",
-        {},
-        { withCredentials: true },
-      );
+      await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
       navigate("/login", {
         state: { message: "Successfully logged out" },
       });

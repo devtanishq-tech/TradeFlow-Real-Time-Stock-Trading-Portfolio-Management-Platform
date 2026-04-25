@@ -9,6 +9,7 @@ export default function FundsWithdraw({
   funds,
   setFunds,
 }) {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [amount, setAmount] = useState(""); // keeep track of the input we type
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -33,7 +34,7 @@ export default function FundsWithdraw({
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:8080/funds/withdraw",
+        `${BASE_URL}/funds/withdraw`,
         { amount: numericAmount },
         { withCredentials: true },
       );

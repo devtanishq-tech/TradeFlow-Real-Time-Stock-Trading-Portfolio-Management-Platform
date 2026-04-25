@@ -11,6 +11,7 @@ const Summary = ({
   pnl,
   pnlPercent,
 }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [user, setuser] = useState({});
   // const totalInvestment = useMemo(() => {
   //   return holdings.reduce((sum, s) => sum + s.avg * s.qty, 0);
@@ -27,7 +28,7 @@ const Summary = ({
   //============================Practisign request sending =========================
   useEffect(() => {
     axios
-      .get("http://localhost:8080/me", { withCredentials: true })
+      .get(`${BASE_URL}/me`, { withCredentials: true })
       .then((res) => {
         setuser(res.data);
       })

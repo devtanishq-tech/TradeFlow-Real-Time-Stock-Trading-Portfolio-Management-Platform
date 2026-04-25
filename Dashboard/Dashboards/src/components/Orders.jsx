@@ -154,6 +154,7 @@ const COLUMNS = [
 ];
 
 const Orders = ({ livePrices = {} }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
@@ -163,7 +164,7 @@ const Orders = ({ livePrices = {} }) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:8080/orders", { withCredentials: true })
+      .get(`${BASE_URL}/orders`, { withCredentials: true })
       .then((res) => setOrders(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));

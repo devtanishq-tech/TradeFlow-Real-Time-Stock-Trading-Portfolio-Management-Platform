@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function FundsAdd({ onClose, refreshFunds }) {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -16,7 +17,7 @@ export default function FundsAdd({ onClose, refreshFunds }) {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:8080/funds/add",
+        `${BASE_URL}/funds/add`,
         { amount: numericAmount },
         { withCredentials: true },
       );

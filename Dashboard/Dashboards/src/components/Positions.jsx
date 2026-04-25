@@ -194,12 +194,13 @@ const EmptyState = () => (
 
 /* ─── Main Component ─────────────────────────────────────────────── */
 const Positions = ({ livePrices }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [allPositions, setAllPositions] = useState([]);
   const [sortAsc, setSortAsc] = useState(false); // default: desc (best P&L first)
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/positions", { withCredentials: true })
+      .get(`${BASE_URL}/positions`, { withCredentials: true })
       .then((res) => setAllPositions(res.data))
       .catch((err) => console.error("Positions fetch error:", err));
   }, []);
@@ -237,7 +238,7 @@ const Positions = ({ livePrices }) => {
   const handleExit = async (stock) => {
     try {
       await axios.post(
-        "http://localhost:8080/orders",
+        `${BASE_URL}/orders`,
         {
           stockName: stock.name,
           qty: stock.qty,

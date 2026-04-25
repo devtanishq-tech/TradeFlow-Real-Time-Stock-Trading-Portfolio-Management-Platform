@@ -7,6 +7,7 @@ import { ContextWindow } from "./ContextWindow";
 import "./BuyAction.css";
 
 const OrderWindow = ({ uuid, mode, setHoldings }) => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const [qty, setqty] = useState(1);
   const [price, setprice] = useState(0.0);
   // const [holdings, setholdings] = useState({});
@@ -16,7 +17,7 @@ const OrderWindow = ({ uuid, mode, setHoldings }) => {
     try {
       // this sending data from front to backend
       let res = await axios.post(
-        "http://localhost:8080/orders",
+        `${BASE_URL}/orders`,
         {
           stockName: uuid,
           qty: Number(qty), // this is the latest have made on 10/04/2026
@@ -26,7 +27,7 @@ const OrderWindow = ({ uuid, mode, setHoldings }) => {
         { withCredentials: true },
       );
       console.log(res.data);
-      const updateData = await axios.get("http://localhost:8080/holdings", {
+      const updateData = await axios.get(`${BASE_URL}/holdings`, {
         withCredentials: true,
       });
       setHoldings(updateData.data);
