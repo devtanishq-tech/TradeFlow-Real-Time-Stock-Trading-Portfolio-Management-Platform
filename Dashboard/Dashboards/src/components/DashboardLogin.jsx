@@ -51,7 +51,7 @@ const DashboardLogin = () => {
   // flash store the message
   const [flash, setflash] = useState("");
   const [show, setshow] = useState(false);
-  const location = useLocation();
+  const tion = useLocation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -73,7 +73,7 @@ const DashboardLogin = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8080/login", {
+      const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
