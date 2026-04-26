@@ -19,9 +19,6 @@ const Dashboard = () => {
   const [livePrices, setLivePrices] = useState({});
   const [portfolioHistory, setPortfolioHistory] = useState([]);
 
-  // ✅ ADD THIS (you missed it)
-  const [refreshOrders, setRefreshOrders] = useState(false);
-
   // ================= Portfolio History =================
   useEffect(() => {
     const saved = localStorage.getItem("portfolioHistory");
@@ -89,10 +86,7 @@ const Dashboard = () => {
     totalInvestment > 0 ? ((pnl / totalInvestment) * 100).toFixed(2) : "0.00";
 
   return (
-    <ContextWindowProvider
-      setHoldings={setHoldings}
-      triggerOrdersRefresh={() => setRefreshOrders((prev) => !prev)}
-    >
+    <ContextWindowProvider setHoldings={setHoldings}>
       <div className="dashboard-container">
         <WatchList livePrices={livePrices} />
 
@@ -113,12 +107,9 @@ const Dashboard = () => {
               }
             />
 
-            {/* ✅ FIXED: pass refreshOrders */}
             <Route
               path="/orders"
-              element={
-                <Orders livePrices={livePrices} refreshOrders={refreshOrders} />
-              }
+              element={<Orders livePrices={livePrices} />}
             />
 
             <Route
