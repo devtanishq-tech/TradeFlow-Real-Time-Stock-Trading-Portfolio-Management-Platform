@@ -98,7 +98,7 @@ const Dashboard = () => {
   return (
     <ContextWindowProvider
       setHoldings={setHoldings}
-      triggerOrdersRefresh={setRefreshOrders((prev) => !prev)}
+      triggerOrdersRefresh={setRefreshOrders(prev => !prev)}
     >
       <div className="dashboard-container">
         <WatchList livePrices={livePrices} />
