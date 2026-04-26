@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [holdings, setHoldings] = useState([]); // cuz data comes from the hold are in array State
   const [livePrices, setlivePrices] = useState({});
   const [portfolioHistory, setPortfolioHistory] = useState([]);
+  const [refreshOrders, setRefreshOrders] = useState(false);
   /// ========================================Local Storage PortFolioHistory here ==========================================
   useEffect(() => {
     const saved = localStorage.getItem("portfolioHistory");
@@ -95,7 +96,10 @@ const Dashboard = () => {
   const pnlPercent =
     totalInvestment > 0 ? ((pnl / totalInvestment) * 100).toFixed(2) : "0.00";
   return (
-    <ContextWindowProvider setHoldings={setHoldings}>
+    <ContextWindowProvider
+      setHoldings={setHoldings}
+      triggerOrdersRefresh={setRefreshOrders((prev) => !prev)}
+    >
       <div className="dashboard-container">
         <WatchList livePrices={livePrices} />
         <div className="content">
@@ -117,7 +121,9 @@ const Dashboard = () => {
             />
             <Route
               path="/orders"
-              element={<Orders livePrices={livePrices} />}
+              element={
+                <Orders livePrices={livePrices} refreshOrders={refreshOrders} />
+              }
             />
             <Route
               path="/holdings"

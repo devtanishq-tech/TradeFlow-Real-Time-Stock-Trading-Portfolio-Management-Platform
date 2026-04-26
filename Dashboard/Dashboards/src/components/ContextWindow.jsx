@@ -4,7 +4,11 @@ import OrderWindow from "./OrderWindow";
 const ContextWindow = React.createContext();
 //   openWindow: (uuid) => {},
 //   closeWindow: () => {},
-export default function ContextWindowProvider({ children, setHoldings }) {
+export default function ContextWindowProvider({
+  children,
+  setHoldings,
+  triggerOrdersRefresh,
+}) {
   const [isOpen, setisOpen] = useState(false);
   const [currentStockid, setcurrentStockid] = useState("");
   const [mode, setmode] = useState("");
@@ -29,6 +33,7 @@ export default function ContextWindowProvider({ children, setHoldings }) {
           uuid={currentStockid}
           mode={mode}
           setHoldings={setHoldings}
+          triggerOrdersRefresh={triggerOrdersRefresh}
         />
       )}
     </ContextWindow.Provider>
