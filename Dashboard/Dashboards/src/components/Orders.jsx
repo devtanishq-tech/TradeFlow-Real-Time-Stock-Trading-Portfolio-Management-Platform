@@ -153,7 +153,7 @@ const COLUMNS = [
   { key: null, label: "Status" },
 ];
 
-const Orders = ({ livePrices = {}, refreshOrders }) => {
+const Orders = ({ livePrices = {} }) => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
@@ -168,7 +168,7 @@ const Orders = ({ livePrices = {}, refreshOrders }) => {
       .then((res) => setOrders(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, [refreshOrders]);
+  }, []);
 
   const handleSort = useCallback((key) => {
     if (!key) return;
