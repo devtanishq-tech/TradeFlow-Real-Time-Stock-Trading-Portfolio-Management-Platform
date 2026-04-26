@@ -212,6 +212,48 @@ export const watchlist = [
     percent: "0.95%",
     isDown: false,
   },
+  {
+    name: "DMART(INTRA)",
+    price: 3912.8,
+    percent: "0.44%",
+    isDown: false,
+  },
+  {
+    name: "PIDILITIND(INTRA)",
+    price: 2858.6,
+    percent: "-0.58%",
+    isDown: true,
+  },
+  {
+    name: "BERGEPAINT(INTRA)",
+    price: 618.2,
+    percent: "0.94%",
+    isDown: false,
+  },
+  {
+    name: "DABUR(INTRA)",
+    price: 539.75,
+    percent: "-1.00%",
+    isDown: true,
+  },
+  {
+    name: "INDIGO(INTRA)",
+    price: 4165.3,
+    percent: "1.08%",
+    isDown: false,
+  },
+  {
+    name: "NAUKRI(INTRA)",
+    price: 5825.9,
+    percent: "-1.09%",
+    isDown: true,
+  },
+  {
+    name: "BANKBARODA(INTRA)",
+    price: 268.4,
+    percent: "0.96%",
+    isDown: false,
+  },
 ];
 
 // holdings
