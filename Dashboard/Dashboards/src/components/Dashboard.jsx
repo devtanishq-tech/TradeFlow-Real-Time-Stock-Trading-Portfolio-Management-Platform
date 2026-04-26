@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Apps from "./Apps";
 import Funds from "./Funds";
@@ -15,18 +14,20 @@ import AIChatAssistant from "./AIChatAssistant";
 const Dashboard = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const WS_URL = import.meta.env.VITE_WS_URL;
-  const [holdings, setHoldings] = useState([]); // cuz data comes from the hold are in array State
-  const [livePrices, setlivePrices] = useState({});
+
+  const [holdings, setHoldings] = useState([]);
+  const [livePrices, setLivePrices] = useState({});
   const [portfolioHistory, setPortfolioHistory] = useState([]);
+
+  // ✅ ADD THIS (you missed it)
   const [refreshOrders, setRefreshOrders] = useState(false);
-  /// ========================================Local Storage PortFolioHistory here ==========================================
+
+  // ================= Portfolio History =================
   useEffect(() => {
     const saved = localStorage.getItem("portfolioHistory");
-
-    if (saved) {
-      setPortfolioHistory(JSON.parse(saved));
-    }
+    if (saved) setPortfolioHistory(JSON.parse(saved));
   }, []);
+
   useEffect(() => {
     if (!holdings.length) return;
 
@@ -39,51 +40,42 @@ const Dashboard = () => {
 
     if (!isFinite(total)) return;
 
-    setPortfolioHistory((prev) => {
-      const updated = [...prev, total];
-      return updated.slice(-50);
-    });
+    setPortfolioHistory((prev) => [...prev, total].slice(-50));
   }, [livePrices, holdings]);
+
   useEffect(() => {
     localStorage.setItem("portfolioHistory", JSON.stringify(portfolioHistory));
   }, [portfolioHistory]);
-  // ===========================================Calculation of Holding occur ==------------------------------------------
+
+  // ================= Fetch Holdings =================
   useEffect(() => {
     axios
       .get(`${BASE_URL}/holdings`, { withCredentials: true })
-      .then((res) => {
-        setHoldings(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => setHoldings(res.data))
+      .catch(console.log);
   }, []);
+
+  // ================= WebSocket =================
   useEffect(() => {
-    // webSockert already stores in the browserx
     const ws = new WebSocket(WS_URL);
 
-    ws.onopen = () => {
-      console.log("🟢 Connected to backend WebSocket");
-    };
+    ws.onopen = () => console.log("🟢 Connected to WebSocket");
 
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data); // readable format conversion that data comes from the backed
+      const data = JSON.parse(event.data);
 
-      console.log("📡 Live data:", data); // DEBUG
-      //============This is where updation of Prices occur in this ========================//
-      setlivePrices((prev) => ({
+      setLivePrices((prev) => ({
         ...prev,
         ...data,
       }));
     };
 
-    ws.onclose = () => {
-      console.log("🔴 WebSocket disconnected");
-    };
+    ws.onclose = () => console.log("🔴 WebSocket disconnected");
 
     return () => ws.close();
   }, []);
-  //===========================Logic Come from the Holdings /========================
+
+  // ================= Calculations =================
   const totalInvestment = holdings.reduce((sum, s) => sum + s.avg * s.qty, 0);
 
   const currentValue = holdings.reduce((sum, s) => {
@@ -95,17 +87,18 @@ const Dashboard = () => {
 
   const pnlPercent =
     totalInvestment > 0 ? ((pnl / totalInvestment) * 100).toFixed(2) : "0.00";
+
   return (
     <ContextWindowProvider
       setHoldings={setHoldings}
-      triggerOrdersRefresh={setRefreshOrders(prev => !prev)}
+      triggerOrdersRefresh={() => setRefreshOrders((prev) => !prev)}
     >
       <div className="dashboard-container">
         <WatchList livePrices={livePrices} />
+
         <div className="content">
           <Routes>
             <Route
-              exact
               path="/"
               element={
                 <Summary
@@ -119,12 +112,15 @@ const Dashboard = () => {
                 />
               }
             />
+
+            {/* ✅ FIXED: pass refreshOrders */}
             <Route
               path="/orders"
               element={
                 <Orders livePrices={livePrices} refreshOrders={refreshOrders} />
               }
             />
+
             <Route
               path="/holdings"
               element={
@@ -135,14 +131,17 @@ const Dashboard = () => {
                 />
               }
             />
+
             <Route
               path="/positions"
               element={<Positions livePrices={livePrices} />}
             />
+
             <Route path="/funds" element={<Funds />} />
             <Route path="/apps" element={<Apps />} />
           </Routes>
         </div>
+
         <AIChatAssistant livePrices={livePrices} holdings={holdings} />
       </div>
     </ContextWindowProvider>
