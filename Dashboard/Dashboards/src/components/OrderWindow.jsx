@@ -6,7 +6,7 @@ import { ContextWindow } from "./ContextWindow";
 
 import "./BuyAction.css";
 
-const OrderWindow = ({ uuid, mode, setHoldings, triggerOrdersRefresh }) => {
+const OrderWindow = ({ uuid, mode, setHoldings }) => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const [qty, setqty] = useState(1);
   const [price, setprice] = useState(0.0);
@@ -30,8 +30,7 @@ const OrderWindow = ({ uuid, mode, setHoldings, triggerOrdersRefresh }) => {
       const updateData = await axios.get(`${BASE_URL}/holdings`, {
         withCredentials: true,
       });
-      setHoldings(updateData.data); // this is where holding data get updated
-      triggerOrdersRefresh(); // this will update the order jsx data
+      setHoldings(updateData.data);
     } catch (err) {
       console.log(err);
     }
