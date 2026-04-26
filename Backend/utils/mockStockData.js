@@ -210,6 +210,48 @@ const BASE_STOCKS = [
     sector: "FMCG",
     basePrice: 2534.85,
   },
+  {
+    symbol: "DMART(INTRA)",
+    name: "Avenue Supermarts Ltd",
+    sector: "Retail",
+    basePrice: 3895.6,
+  },
+  {
+    symbol: "PIDILITIND(INTRA)",
+    name: "Pidilite Industries Ltd",
+    sector: "Chemicals",
+    basePrice: 2875.3,
+  },
+  {
+    symbol: "BERGEPAINT(INTRA)",
+    name: "Berger Paints India Ltd",
+    sector: "Consumer",
+    basePrice: 612.45,
+  },
+  {
+    symbol: "DABUR(INTRA)",
+    name: "Dabur India Ltd",
+    sector: "FMCG",
+    basePrice: 545.2,
+  },
+  {
+    symbol: "INDIGO(INTRA)",
+    name: "InterGlobe Aviation Ltd",
+    sector: "Aviation",
+    basePrice: 4120.75,
+  },
+  {
+    symbol: "NAUKRI(INTRA)",
+    name: "Info Edge (India) Ltd",
+    sector: "Internet Services",
+    basePrice: 5890.4,
+  },
+  {
+    symbol: "BANKBARODA(INTRA)",
+    name: "Bank of Baroda",
+    sector: "Banking",
+    basePrice: 265.85,
+  },
 ];
 
 const priceStore = {};
