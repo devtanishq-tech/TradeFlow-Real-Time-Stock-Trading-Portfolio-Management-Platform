@@ -41,7 +41,6 @@ async function main() {
     console.log(`Database Connection has beem Successfully Set`);
     // await Positions.deleteMany({});
     // await Positions.insertMany(Data);
-    console.log(`Data has been succesfully added `);
   } catch (e) {
     console.log(e);
   }
@@ -170,11 +169,12 @@ app.post("/signup", async (req, res) => {
       .status(201)
       .json({ message: "user has been created Successfulyy", User });
   } catch (err) {
-    console.log("Sing uo errir ", err);
+    console.log("Singn up error  ", err);
     res.status(500).json({ error: err.message });
   }
 });
 app.post("/logout", (req, res) => {
+  // as Token are stored in Cokkies , we simply remove the cookie from this
   res.clearCookie("token", {
     httpOnly: true,
     sameSite: "lax",

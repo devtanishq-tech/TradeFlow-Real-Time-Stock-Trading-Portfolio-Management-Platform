@@ -51,7 +51,7 @@ const DashboardLogin = () => {
   // flash store the message
   const [flash, setflash] = useState("");
   const [show, setshow] = useState(false);
-  const tion = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");

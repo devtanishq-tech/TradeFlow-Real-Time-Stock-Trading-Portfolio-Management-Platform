@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./KiteAuth.css";
 import { useNavigate } from "react-router-dom";
 
@@ -45,6 +46,9 @@ const EyeIcon = ({ open }) =>
   );
 
 const DashboardSignup = () => {
+  const location = useLocation();
+  const [flash, setflash] = useState("");
+  const [show, setshow] = useState(false);
   const BASE_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +60,20 @@ const DashboardSignup = () => {
     confirmPassword: "",
   });
 
+  // ✅ Moved to component top level — was incorrectly nested inside handleSignup
+  useEffect(() => {
+    if (location.state?.message) {
+      setflash(location.state.message);
+      setshow(true);
+
+      const timer = setTimeout(() => {
+        setshow(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -64,6 +82,13 @@ const DashboardSignup = () => {
     e.preventDefault();
 
     if (form.password !== form.confirmPassword) {
+      setflash("Passwords do not match");
+      setshow(true);
+
+      setTimeout(() => {
+        setshow(false);
+      }, 3000);
+
       return;
     }
 
@@ -85,20 +110,33 @@ const DashboardSignup = () => {
       const data = await res.json();
 
       if (res.ok) {
-        navigate("/", { state: { message: "Signup successful" } });
+        navigate("/", {
+          state: {
+            message: "Signup successful",
+          },
+        });
       } else {
-        navigate("/signup", { state: { message: data.message } });
+        setflash(data.message);
+        setshow(true);
+
+        setTimeout(() => {
+          setshow(false);
+        }, 3000);
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
     }
   };
 
   return (
     <div className="kite-page">
       <div className="kite-page__body">
+        {flash && (
+          <div className={`flash-message ${show ? "show" : "hide"}`}>
+            {flash}
+          </div>
+        )}
         <div className="kite-card kite-card--signup">
-          {/* Logo */}
           <div className="text-center">
             <img src="logo.png" alt="Kite Logo" className="kite-logo" />
           </div>
@@ -106,7 +144,6 @@ const DashboardSignup = () => {
           <h5 className="kite-title">Sign up for Kite</h5>
 
           <form onSubmit={handleSignup} className="kite-form">
-            {/* Username — floating label */}
             <div
               className={`kite-form__group ${form.username ? "has-value" : ""}`}
             >
@@ -121,7 +158,6 @@ const DashboardSignup = () => {
               <label className="kite-label">Username</label>
             </div>
 
-            {/* Email — floating label */}
             <div
               className={`kite-form__group ${form.email ? "has-value" : ""}`}
             >
@@ -136,7 +172,6 @@ const DashboardSignup = () => {
               <label className="kite-label">Email</label>
             </div>
 
-            {/* Password — floating label */}
             <div
               className={`kite-form__group ${form.password ? "has-value" : ""}`}
             >
@@ -159,7 +194,6 @@ const DashboardSignup = () => {
               </span>
             </div>
 
-            {/* Confirm Password — floating label */}
             <div
               className={`kite-form__group ${form.confirmPassword ? "has-value" : ""}`}
             >
@@ -249,5 +283,4 @@ const DashboardSignup = () => {
     </div>
   );
 };
-
 export default DashboardSignup;

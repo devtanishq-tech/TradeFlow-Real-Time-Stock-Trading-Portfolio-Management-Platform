@@ -55,6 +55,7 @@ const Dashboard = () => {
   // ================= WebSocket =================
   useEffect(() => {
     const ws = new WebSocket(WS_URL);
+    console.log("WS_URL:", WS_URL);
 
     ws.onopen = () => console.log("🟢 Connected to WebSocket");
 

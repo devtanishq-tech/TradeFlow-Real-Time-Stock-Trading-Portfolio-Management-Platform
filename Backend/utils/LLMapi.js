@@ -1,25 +1,20 @@
 require("dotenv").config();
 
-const { GoogleGenAI } = require("@google/genai");
+const Groq = require("groq-sdk");
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+const groq = new Groq({
+  apiKey: process.env.Groq_API,
 });
 
 async function LLMapi(query, context, history = []) {
   try {
-    // const historyText =
-    //   history?.length > 0
-    //     ? history
-    //         .filter((m) => m && m.text)
-    //         .map((m) => `${m.role}: ${m.text}`)
-    //         .join("\n")
-    //     : "No previous conversation";
+    // Keep only last 2 messages
     const historyText =
       history
-        ?.slice(-2) // only last 2 messages
-        .map((m) => `${m.role}:${m.text}`)
+        ?.slice(-2)
+        .map((m) => `${m.role}: ${m.text}`)
         .join("\n") || "";
+
     const prompt = `
 You are a stock assistant.
 
@@ -31,34 +26,40 @@ ${context}
 
 User: ${query}
 
-Answer:
-- Short
-- Actionable
+Answer Rules:
+- Keep response short
+- Be actionable
 - Mention best performing stock
 - Mention worst performing stock
 - Suggest action if needed
 `;
 
-    const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [
+    const result = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful stock market assistant that gives concise insights.",
+        },
         {
           role: "user",
-          parts: [{ text: prompt }],
+          content: prompt,
         },
       ],
-      generationConfig: {
-        maxOutputTokens: 90,
-      },
+
+      temperature: 0.5,
+      max_tokens: 90,
     });
 
-    return result.text;
+    return result.choices[0].message.content;
   } catch (err) {
-    console.error("❌ LLM ERROR:", err.message || err);
+    console.error("❌ LLM ERROR:", err);
 
-    // Gracefully handle rate limits so the frontend receives a friendly message
+    // Rate limit handling
     if (err.status === 429) {
-      return "I'm receiving too many requests! Please wait about a minute and try asking again.";
+      return "I'm receiving too many requests. Please wait a minute and try again.";
     }
 
     return "AI is currently unavailable. Please try again.";
