@@ -60,20 +60,6 @@ const DashboardSignup = () => {
     confirmPassword: "",
   });
 
-  // ✅ Moved to component top level — was incorrectly nested inside handleSignup
-  useEffect(() => {
-    if (location.state?.message) {
-      setflash(location.state.message);
-      setshow(true);
-
-      const timer = setTimeout(() => {
-        setshow(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [location.state]);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -108,7 +94,7 @@ const DashboardSignup = () => {
       });
 
       const data = await res.json();
-
+      // ========================backend error fix
       if (res.ok) {
         navigate("/", {
           state: {
@@ -126,17 +112,32 @@ const DashboardSignup = () => {
     } catch (err) {
       console.error(err.message);
     }
+    useEffect(() => {
+      if (location.state?.message) {
+        setflash(location.state.message);
+        setshow(true);
+
+        const timer = setTimeout(() => {
+          setshow(false);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+      }
+    }, [location.state]);
   };
 
   return (
     <div className="kite-page">
       <div className="kite-page__body">
+        {/* =======================flash div  */}
         {flash && (
           <div className={`flash-message ${show ? "show" : "hide"}`}>
             {flash}
           </div>
         )}
+        {/* ================flash div end  */}
         <div className="kite-card kite-card--signup">
+          {/* Logo */}
           <div className="text-center">
             <img src="logo.png" alt="Kite Logo" className="kite-logo" />
           </div>
@@ -144,6 +145,7 @@ const DashboardSignup = () => {
           <h5 className="kite-title">Sign up for Kite</h5>
 
           <form onSubmit={handleSignup} className="kite-form">
+            {/* Username — floating label */}
             <div
               className={`kite-form__group ${form.username ? "has-value" : ""}`}
             >
@@ -158,6 +160,7 @@ const DashboardSignup = () => {
               <label className="kite-label">Username</label>
             </div>
 
+            {/* Email — floating label */}
             <div
               className={`kite-form__group ${form.email ? "has-value" : ""}`}
             >
@@ -172,6 +175,7 @@ const DashboardSignup = () => {
               <label className="kite-label">Email</label>
             </div>
 
+            {/* Password — floating label */}
             <div
               className={`kite-form__group ${form.password ? "has-value" : ""}`}
             >
@@ -194,6 +198,7 @@ const DashboardSignup = () => {
               </span>
             </div>
 
+            {/* Confirm Password — floating label */}
             <div
               className={`kite-form__group ${form.confirmPassword ? "has-value" : ""}`}
             >
@@ -283,4 +288,5 @@ const DashboardSignup = () => {
     </div>
   );
 };
+
 export default DashboardSignup;
